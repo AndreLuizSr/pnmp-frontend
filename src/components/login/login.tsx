@@ -1,8 +1,9 @@
 import Image from "next/image";
-
 import { Footermain } from "../footer/footer";
+import Link from "next/link";
 
 export function Login() {
+  
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex items-center justify-center bg-gradient-to-r from-green-500 to-cyan-700 flex-grow">
@@ -37,7 +38,7 @@ export function Login() {
               />
             </div>
             <div className="flex items-center justify-between mb-6">
-            <button
+              <button
                 className="bg-green-500 hover:bg-green-800/95 text-white font-bold py-2 px-4 rounded shadow-md"
                 type="submit"
               >
@@ -52,15 +53,17 @@ export function Login() {
               </div>
             </div>
             <div className="mt-4 text-center">
+              <Link href='/user'><h1>
               <p className="text-gray-800">
                 Caso necessite, entrar em contato com sua coordenação para recuperar a senha.
               </p>
+              teste!</h1></Link>
             </div>
           </form>
 
         </div>
       </div>
-      <Footermain/>
+      <Footermain />
     </div>
   )
 }
