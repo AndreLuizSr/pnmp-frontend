@@ -1,25 +1,51 @@
-import { Key } from 'react';
-import { Edit } from 'lucide-react';
+"use client";
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getData } from './functions/get/getUsers';
-import { DeleteUser } from './functions/delet/delet';
-import { revalidatePath } from 'next/cache';
+import { UserModel } from '../types';
+import useSWR from 'swr';
+import User from '../components/User';
+import { fetcher } from '../libs';
 
+export default function UsersManage() {
 
-export default async function UsersManage() {
-  const data = await getData();
-  revalidatePath('/', 'layout')
+  const [users, setUsers] = useState<UserModel[]>([]);
+  const { data, error, isLoading } = useSWR(process.env.NEXT_PUBLIC_BASE_URL + `/users`, fetcher);
+  useEffect(() => {
+    if (data) {
+      setUsers(data);
+    }
+  }, [data, isLoading])
+  if (error) return <div>Failed to load</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (!data) return null;
 
+  let delete_User: UserModel['deleteUser'] = async (email: string) => {
+    try {
+        const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL +`/users/${email}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+        });
+        console.log("Resposta da API:", res);
+        if (!res.ok) {
+            throw new Error("Erro ao apagar usuário");
+        }
+        console.log("Usuário apagado com sucesso!");
+        setUsers(users.filter(user => user.email !== email));
+    } catch (error: any) {
+        console.error("Erro ao apagar usuário:", error.message);
+    }
+};
   return (
     <div className="flex flex-col flex-grow w-full bg-slate-200/40 font-sans">
       <div className="container mx-auto my-8 p-8 bg-white shadow-md rounded-lg">
         <h1 className="text-3xl font-bold mb-8">Gerenciar Usuários</h1>
 
         <div className="mb-4">
-          <Link className="bg-green-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded" href='/user/functions/add'>
+          <Link className="bg-green-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded" href={'/user/create'}>
             adicionar
           </Link>
-
         </div>
         <form>
           <table className="min-w-full bg-white border border-gray-300">
@@ -32,27 +58,15 @@ export default async function UsersManage() {
               </tr>
             </thead>
             <tbody>
-              {data.map((data: { name: string; email: string; phone: string; institution: string; }, users: Key) => (
-                <tr key={users} className="border-b">
-                  <td className="py-3 px-4">{data.name}</td>
-                  <td className="py-3 px-4">{data.email}</td>
-                  <td className="py-3 px-4">{data.phone}</td>
-                  <td className="py-3 px-4">
-                    <Link className="text-blue-500 hover:underline" href={`/user/functions/${encodeURIComponent(data.email)}`}>
-                      <Edit />
-                    </Link>
-                    <DeleteUser params={{
-                      email: data.email
-                    }} />
-                  </td>
-                </tr>
-              ))}
+              {
+                users && users.map((item: UserModel) => <User key={item.email} {...item} deleteUser={delete_User} />)
+              }
             </tbody>
           </table>
         </form>
       </div>
     </div>
   );
-  
+
 }
 
