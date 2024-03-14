@@ -1,17 +1,20 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { UserModel } from '../types';
 import useSWR from 'swr';
-import User from '../components/User';
-import { fetcher } from '../libs';
+import { UserModel } from '@/app/types';
+import { fetcher } from '@/app/libs';
+import User from '@/app/components/User';
+
 
 export default function UsersManage() {
-
+  
   const [users, setUsers] = useState<UserModel[]>([]);
-  const { data, error, isLoading } = useSWR(process.env.NEXT_PUBLIC_BASE_URL + `/users`, fetcher);
+  const { data, error, isLoading } = useSWR(process.env.NEXT_PUBLIC_BASE_URL + `/users`, fetcher, )
+  
   useEffect(() => {
     if (data) {
+      console.log("Dados recebidos:", data);
       setUsers(data);
     }
   }, [data, isLoading])
