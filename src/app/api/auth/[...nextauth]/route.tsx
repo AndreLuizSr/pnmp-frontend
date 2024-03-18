@@ -3,6 +3,7 @@ import nextAuth, { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 const nextAuthOptions: NextAuthOptions = {
+    secret: process.env.JWT_SECRET_KEY,
     providers: [
         Credentials({
             name: 'credentials',
