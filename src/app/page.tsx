@@ -1,6 +1,5 @@
-import { Login } from "@/app/(auth-routes)/login/login";
-import { Footermain } from "../components/footer";
-
+import { Footermain } from "./components/footer";
+import { Login } from "./login/login";
 
 export default function Home() {
   return (

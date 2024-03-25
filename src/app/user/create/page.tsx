@@ -1,35 +1,26 @@
 "use client"
-import { fetcher } from "@/app/libs"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import useSWR from 'swr'
+import { useState } from "react"
+import Checkbox from "@/app/components/checkbox"
 
-export default function EditeForm({ params }: { params: { email: string } }) {
-    const router = useRouter()
-    const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
-    const { data: user, isLoading: Loading } = useSWR(process.env.NEXT_PUBLIC_BASE_URL + `/users/${params.email}`, fetcher)
+export default function CreateForm() {
 
-    useEffect(() => {
-        if (user) {
-            console.log(user)
-            setName(user.name)
-            setPassword(user.password)
-            setEmail(user.email)
-            setPhone(user.phone)
-        }
-    }, [user, Loading])
+    const router = useRouter();
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
+
         try {
             setIsLoading(true);
-            console.log("Editando dados:", { name, password, email, phone });
 
-            const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/users/${params.email}`, {
-                method: "PUT",
+            const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL+`/users`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -38,26 +29,26 @@ export default function EditeForm({ params }: { params: { email: string } }) {
                     password,
                     email,
                     phone,
+                    roles: selectedRoles
                 }),
             });
             console.log("Resposta da API:", response);
+
             if (!response.ok) {
-                throw new Error("Erro ao editar usuário");
+                throw new Error("Erro ao adicionar usuário");
             }
-            console.log("Usuário editado com sucesso!");
+            console.log("Usuário adicionado com sucesso!");
             router.push("/user");
         } catch (error: any) {
-            console.error("Erro ao editar usuário:", error.message);
+            console.error("Erro ao adicionar usuário:", error.message);
         } finally {
             setIsLoading(false);
         }
     };
 
-    if (Loading) return <div><span>Loading...</span></div>
-    if (!user) return null;
     return (
         <div>
-            <h1>Atualizando</h1>
+            <h1>Adicionar Novo Usuário</h1>
             <form className="w-1/2 mx-auto mt-8 p-6 bg-white rounded-md shadow-md"
                 onSubmit={handleSubmit}>
                 <label className="block mb-4">
@@ -100,13 +91,14 @@ export default function EditeForm({ params }: { params: { email: string } }) {
                         value={phone}
                     />
                 </label>
+                <Checkbox selectedRoles={selectedRoles} setSelectedRoles={setSelectedRoles} />
                 <button
                     type="submit"
                     disabled={isLoading}
                     className={`w-full bg-blue-500 text-white rounded-md py-2 ${isLoading ? "opacity-50 cursor-not-allowed" : ""
                         }`}
                 >
-                    {isLoading ? "Editando..." : "Editar"}
+                    {isLoading ? "Adicionando..." : "Adicionar"}
                 </button>
             </form>
         </div>

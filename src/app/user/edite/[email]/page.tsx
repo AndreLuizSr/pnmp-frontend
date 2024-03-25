@@ -1,27 +1,36 @@
 "use client"
-
+import { fetcher } from "@/app/libs"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import useSWR from 'swr'
+import Checkbox from "@/app/components/checkbox"
 
-export default function CreateForm() {
-
+export default function EditeForm({ params }: { params: { email: string } }) {
     const router = useRouter()
-
+    const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const { data: user, isLoading: Loading } = useSWR(process.env.NEXT_PUBLIC_BASE_URL + `/users/${params.email}`, fetcher)
 
+    useEffect(() => {
+        if (user) {
+            console.log(user)
+            setName(user.name)
+            setPassword(user.password)
+            setEmail(user.email)
+            setPhone(user.phone)
+            setSelectedRoles(user.roles);
+        }
+    }, [user, Loading])
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
-
         try {
             setIsLoading(true);
-            console.log("Enviando dados:", { name, password, email, phone });
-
-            const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL+`/users`, {
-                method: "POST",
+            const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/users/${params.email}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -30,25 +39,27 @@ export default function CreateForm() {
                     password,
                     email,
                     phone,
+                    roles: selectedRoles
                 }),
             });
             console.log("Resposta da API:", response);
-
             if (!response.ok) {
-                throw new Error("Erro ao adicionar usuário");
+                throw new Error("Erro ao editar usuário");
             }
-            console.log("Usuário adicionado com sucesso!");
+            console.log("Usuário editado com sucesso!");
             router.push("/user");
         } catch (error: any) {
-            console.error("Erro ao adicionar usuário:", error.message);
+            console.error("Erro ao editar usuário:", error.message);
         } finally {
             setIsLoading(false);
         }
     };
 
+    if (Loading) return <div><span>Loading...</span></div>
+    if (!user) return null;
     return (
         <div>
-            <h1>Adicionar Novo Usuário</h1>
+            <h1>Atualizando</h1>
             <form className="w-1/2 mx-auto mt-8 p-6 bg-white rounded-md shadow-md"
                 onSubmit={handleSubmit}>
                 <label className="block mb-4">
@@ -91,13 +102,14 @@ export default function CreateForm() {
                         value={phone}
                     />
                 </label>
+                <Checkbox selectedRoles={selectedRoles} setSelectedRoles={setSelectedRoles} />
                 <button
                     type="submit"
                     disabled={isLoading}
                     className={`w-full bg-blue-500 text-white rounded-md py-2 ${isLoading ? "opacity-50 cursor-not-allowed" : ""
                         }`}
                 >
-                    {isLoading ? "Adicionando..." : "Adicionar"}
+                    {isLoading ? "Editando..." : "Editar"}
                 </button>
             </form>
         </div>

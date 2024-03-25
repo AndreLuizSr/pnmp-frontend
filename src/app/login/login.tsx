@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Footermain } from "../../components/footer";
 import LoginForm from "./loginForm";
+import { Footermain } from "../components/footer";
 
 export function Login() {
   

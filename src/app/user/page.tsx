@@ -6,7 +6,6 @@ import { UserModel } from '@/app/types';
 import { fetcher } from '@/app/libs';
 import User from '@/app/components/User';
 
-
 export default function UsersManage() {
   
   const [users, setUsers] = useState<UserModel[]>([]);
