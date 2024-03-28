@@ -1,9 +1,9 @@
 import { fetcher } from "@/app/libs";
-import { CheckboxProps, RolesModel } from "@/app/types";
+import { CheckboxRolesProps, RolesModel } from "@/app/types";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-export default function Checkbox({ selectedRoles, setSelectedRoles }: CheckboxProps) {
+export default function Checkbox({ selectedRoles, setSelectedRoles }: CheckboxRolesProps) {
     const [roles, setRoles] = useState<RolesModel[]>([]);
     const { data, error, isLoading } = useSWR(
         process.env.NEXT_PUBLIC_BASE_URL + `/roles`, fetcher

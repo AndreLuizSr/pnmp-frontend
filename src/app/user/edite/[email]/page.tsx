@@ -3,11 +3,11 @@ import { fetcher } from "@/app/libs"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import useSWR from 'swr'
-import Checkbox from "@/app/components/checkbox"
+import Checkbox from "@/app/components/checkboxPermission"
 
 export default function EditeForm({ params }: { params: { email: string } }) {
     const router = useRouter()
-    const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+    const [selectedPermission, setSelectedPermission] = useState<string[]>([]);
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
@@ -22,7 +22,7 @@ export default function EditeForm({ params }: { params: { email: string } }) {
             setPassword(user.password)
             setEmail(user.email)
             setPhone(user.phone)
-            setSelectedRoles(user.roles);
+            setSelectedPermission(user.permission);
         }
     }, [user, Loading])
     const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -39,7 +39,7 @@ export default function EditeForm({ params }: { params: { email: string } }) {
                     password,
                     email,
                     phone,
-                    roles: selectedRoles
+                    permission: selectedPermission
                 }),
             });
             console.log("Resposta da API:", response);
@@ -102,7 +102,7 @@ export default function EditeForm({ params }: { params: { email: string } }) {
                         value={phone}
                     />
                 </label>
-                <Checkbox selectedRoles={selectedRoles} setSelectedRoles={setSelectedRoles} />
+                <Checkbox selectedPermission={selectedPermission} setSelectedPermission={setSelectedPermission} />
                 <button
                     type="submit"
                     disabled={isLoading}

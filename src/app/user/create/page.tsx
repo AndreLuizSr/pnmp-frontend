@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import Checkbox from "@/app/components/checkbox"
+import Checkbox from "@/app/components/checkboxPermission"
 
 export default function CreateForm() {
 
@@ -11,7 +11,7 @@ export default function CreateForm() {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+    const [selectedPermission, setSelectedPermission] = useState<string[]>([]);
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault();
@@ -29,7 +29,7 @@ export default function CreateForm() {
                     password,
                     email,
                     phone,
-                    roles: selectedRoles
+                    permission: selectedPermission
                 }),
             });
             console.log("Resposta da API:", response);
@@ -91,7 +91,7 @@ export default function CreateForm() {
                         value={phone}
                     />
                 </label>
-                <Checkbox selectedRoles={selectedRoles} setSelectedRoles={setSelectedRoles} />
+                <Checkbox selectedPermission={selectedPermission} setSelectedPermission={setSelectedPermission} />
                 <button
                     type="submit"
                     disabled={isLoading}
