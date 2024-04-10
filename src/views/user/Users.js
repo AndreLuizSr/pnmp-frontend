@@ -21,10 +21,10 @@ const Users = () => {
       });
   };
 
-  const handleDeleteUser = (email) => {
-    axios.delete(`http://localhost:3000/users/${email}`)
+  const handleDeleteUser = (user) => {
+    axios.delete(`http://localhost:3000/users/${user._id}`)
         .then(() => {
-            console.log(`Usuário ${email} excluído(a) com sucesso`);
+            console.log(`Usuário ${user.email} excluído(a) com sucesso`);
             fetchPermissions();
         })
         .catch(error => {
@@ -40,7 +40,7 @@ const Users = () => {
             Table Users
           </CardTitle>    
           <CardBody>
-            <NavLink to="/createUser" className="btn btn-success btn-sm ml-3 mb-3">
+            <NavLink to="/user/create" className="btn btn-success btn-sm ml-3 mb-3">
               Adicionar
             </NavLink>
             <Table>
@@ -57,7 +57,7 @@ const Users = () => {
               </thead>
               <tbody>
                 {users.map((user, index) => (
-                  <tr key={index}>
+                  <tr key={user._id}>
                     <th scope="row">{index + 1}</th>
                     <td>{user.name}</td>
                     <td>{user.email}</td>
@@ -65,10 +65,10 @@ const Users = () => {
                     <td>{user.institution}</td>
                     <td>{user.permission}</td>
                     <td>
-                      <NavLink to={`/editUser/${user.email}`} className="btn btn-primary btn-sm mr-">
+                      <NavLink to={`/user/edit/${user._id}`} className="btn btn-primary btn-sm mr-">
                         <Icon.Edit/>
                       </NavLink>
-                      <Button color="danger" size="sm" onClick={() => handleDeleteUser(user.email)}>
+                      <Button color="danger" size="sm" onClick={() => handleDeleteUser(user)}>
                         <Icon.Trash/>
                       </Button>
                     </td>

@@ -14,11 +14,12 @@ import {
   Input,
 } from 'reactstrap';
 
-const UpdateUser = () => {
-  const { email } = useParams();
+const UserEdit = () => {
+  const { _id } = useParams();
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [institution, setInstitution] = useState('');
   const [permissionOptions, setPermissionOptions] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
@@ -26,12 +27,13 @@ const UpdateUser = () => {
 
   useEffect(() => {
     
-    axios.get(`http://localhost:3000/users/${email}`)
+    axios.get(`http://localhost:3000/users/${_id}`)
       .then(response => {
-        const { name, password, phone, institution, permission } = response.data;
+        const { name, password, email, phone, institution, permission } = response.data;
         setName(name);
         setPassword(password);
         setPhone(phone);
+        setEmail(email);
         setInstitution(institution);
         setSelectedPermissions(permission);
       })
@@ -53,9 +55,10 @@ const UpdateUser = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.put(`http://localhost:3000/users/${email}`, {
+      const response = await axios.put(`http://localhost:3000/users/${_id}`, {
         name,
         password,
+        email,
         phone,
         institution,
         permission: selectedPermissions,
@@ -106,10 +109,9 @@ const UpdateUser = () => {
                 <Label for="Email">Email</Label>
                 <Input
                   id="Email"
-                  type="email"
+                  type="text"
                   value={email}
-                  readOnly
-                  disabled
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </FormGroup>
               <FormGroup>
@@ -164,4 +166,4 @@ const UpdateUser = () => {
   );
 };
 
-export default UpdateUser;
+export default UserEdit;

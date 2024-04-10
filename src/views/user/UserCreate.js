@@ -14,7 +14,7 @@ import {
   Input,
 } from 'reactstrap';
 
-const AddUser = () => {
+const UserCreate = () => {
   const [permission, setPermission] = useState([]);
   const navigate = useNavigate();
   const [name, setName] = useState('');
@@ -153,4 +153,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default UserCreate;

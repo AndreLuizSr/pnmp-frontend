@@ -19,8 +19,8 @@ const Breadcrumbs = Loadable(lazy(() => import("../views/ui/Breadcrumbs")));
 
 /***** User Pages ****/
 const User = Loadable(lazy(() => import("../views/user/Users")));
-const CreateUser = Loadable(lazy(() => import("../views/user/create/createUser")));
-const EditUser = Loadable(lazy(() => import("../views/user/edit/editUser")));
+const UserCreate  = Loadable(lazy(() => import("../views/user/UserCreate")));
+const UserEdit  = Loadable(lazy(() => import("../views/user/UserEdit")));
 
 /***** Permission Pages ****/
 const Permission = Loadable(lazy(() => import("../views/permission/permission")));
@@ -50,8 +50,8 @@ const ThemeRoutes = [
 
       /***** User Pages ****/
       { path: "/user", exact: true, element: <User/> },
-      { path: "/createUser", exact: true, element: <CreateUser/> },    
-      { path: "/editUser/:email", exact: true, element: <EditUser/> },    
+      { path: "/user/create", exact: true, element: <UserCreate /> },    
+      { path: "/user/edit/:_id", exact: true, element: <UserEdit /> },    
 
       /***** Permission Pages ****/
       { path: "/permission", exact: true, element: <Permission/> },
