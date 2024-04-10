@@ -89,15 +89,15 @@ const EditPermission = () => {
                             <FormGroup>
                                 <Label for="Roles">Roles</Label>
                                 {roles.map(role => (
-                                    <FormGroup check key={role._id}>
+                                    <FormGroup check key={role.key}>
                                         <Input
                                             type="checkbox"
-                                            id={role._id}
-                                            checked={selectedRoles.includes(role._id)}
-                                            onChange={() => handleRoleChange(role._id)}
+                                            id={role.key}
+                                            checked={selectedRoles.includes(role.key)}
+                                            onChange={() => handleRoleChange(role.key)}
                                         />
-                                        <Label check className="form-check-label" for={role._id}>
-                                            {role.name}
+                                        <Label check className="form-check-label" for={role.key}>
+                                            {role.value}
                                         </Label>
                                     </FormGroup>
                                 ))}

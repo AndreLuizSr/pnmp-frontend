@@ -81,15 +81,15 @@ const CreatePermission = () => {
                             <FormGroup>
                                 <Label for="Roles">Roles</Label>
                                 {roles.map((role, index) => (
-                                    <FormGroup check key={index}>
+                                    <FormGroup check key={role.key}>
                                         <Input
                                             type="checkbox"
-                                            id={`role-${role._id}`}
-                                            checked={selectedRoles.includes(role._id)}
-                                            onChange={() => handleRoleSelection(role._id)}
+                                            id={`role-${role.key}`}
+                                            checked={selectedRoles.includes(role.key)}
+                                            onChange={() => handleRoleSelection(role.key)}
                                         />
-                                        <Label check className="form-check-label" for={`role-${role._id}`}>
-                                            {role.name}
+                                        <Label check className="form-check-label" for={`role-${role.key}`}>
+                                            {role.value}
                                         </Label>
                                     </FormGroup>
                                 ))}
