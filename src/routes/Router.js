@@ -17,6 +17,16 @@ const Tables = Loadable(lazy(() => import("../views/ui/Tables")));
 const Forms = Loadable(lazy(() => import("../views/ui/Forms")));
 const Breadcrumbs = Loadable(lazy(() => import("../views/ui/Breadcrumbs")));
 
+/***** User Pages ****/
+const User = Loadable(lazy(() => import("../views/user/Users")));
+const CreateUser = Loadable(lazy(() => import("../views/user/create/createUser")));
+const EditUser = Loadable(lazy(() => import("../views/user/edit/editUser")));
+
+/***** Permission Pages ****/
+const Permission = Loadable(lazy(() => import("../views/permission/permission")));
+const CreatePermission = Loadable(lazy(() => import("../views/permission/create/createPermission")));
+const EditPermission = Loadable(lazy(() => import("../views/permission/edit/editPermission")));
+
 /***** Auth Pages ****/
 const Error = Loadable(lazy(() => import("../views/auth/Error")));
 /*****Routes******/
@@ -37,6 +47,17 @@ const ThemeRoutes = [
       { path: "/table", exact: true, element: <Tables /> },
       { path: "/forms", exact: true, element: <Forms /> },
       { path: "/breadcrumbs", exact: true, element: <Breadcrumbs /> },
+
+      /***** User Pages ****/
+      { path: "/user", exact: true, element: <User/> },
+      { path: "/createUser", exact: true, element: <CreateUser/> },    
+      { path: "/editUser/:email", exact: true, element: <EditUser/> },    
+
+      /***** Permission Pages ****/
+      { path: "/permission", exact: true, element: <Permission/> },
+      { path: "/createPermission", exact: true, element: <CreatePermission/> },
+      { path: "/editPermission/:name", exact: true, element: <EditPermission /> },
+      
       { path: "*", element: <Navigate to="/auth/404" /> },
     ],
   },
