@@ -15,10 +15,6 @@ import {
 import * as Icon from 'react-feather';
 import { Bell, MessageSquare } from 'react-feather';
 import { useSelector, useDispatch } from 'react-redux';
-import SimpleBar from 'simplebar-react';
-import MessageDD from './MessageDD';
-import NotificationDD from './NotificationDD';
-import MegaDD from './MegaDD';
 import user1 from '../../assets/images/users/user1.jpg';
 
 import { ToggleMobileSidebar } from '../../store/customizer/CustomizerSlice';
@@ -59,76 +55,8 @@ const HorizontalHeader = () => {
           >
             <i className={`bi ${isMobileSidebar ? 'bi-x' : 'bi-list'}`} />
           </Button>
-
-          {/******************************/}
-          {/**********Notification DD**********/}
-          {/******************************/}
-          <UncontrolledDropdown>
-            <DropdownToggle className=" hov-dd border-0" color={topbarColor}>
-              <Bell size={18} />
-            </DropdownToggle>
-            <DropdownMenu className="ddWidth" end>
-              <DropdownItem header>
-                <span className="mb-0 fs-5">Notifications</span>
-              </DropdownItem>
-              <DropdownItem divider />
-              <SimpleBar style={{ maxHeight: '350px' }}>
-                <NotificationDD />
-              </SimpleBar>
-              <DropdownItem divider />
-              <div className="p-2 px-3">
-                <Button color="primary" size="sm" block>
-                  Check All
-                </Button>
-              </div>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-          {/******************************/}
-          {/**********Message DD**********/}
-          {/******************************/}
-          <UncontrolledDropdown className="mx-1">
-            <DropdownToggle className=" hov-dd border-0" color={topbarColor}>
-              <MessageSquare size={18} />
-            </DropdownToggle>
-            <DropdownMenu className="ddWidth" end>
-              <DropdownItem header>
-                <span className="mb-0 fs-5">Messages</span>
-              </DropdownItem>
-              <DropdownItem divider />
-              <SimpleBar style={{ maxHeight: '350px' }}>
-                <MessageDD />
-              </SimpleBar>
-              <DropdownItem divider />
-              <div className="p-2 px-3">
-                <Button color="primary" size="sm" block>
-                  Check All
-                </Button>
-              </div>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-          {/******************************/}
-          {/**********Mega DD**********/}
-          {/******************************/}
-          <UncontrolledDropdown className="mega-dropdown mx-1">
-            <DropdownToggle className=" hov-dd border-0" color={topbarColor}>
-              <Icon.Grid size={18} />
-            </DropdownToggle>
-            <DropdownMenu>
-              <MegaDD />
-            </DropdownMenu>
-          </UncontrolledDropdown>
-          <NavItem className="d-none d-md-block  hov-dd">
-            <Link to="/about" className={`nav-link ${topbarColor === 'white' ? 'text-dark' : ''}`}>
-              About
-            </Link>
-          </NavItem>
         </Nav>
         <div className="d-flex align-items-center">
-          <Input
-            type="search"
-            placeholder="Search"
-            className="rounded-pill my-1 ms-auto d-none d-md-block"
-          />
           {/******************************/}
           {/**********Profile DD**********/}
           {/******************************/}
