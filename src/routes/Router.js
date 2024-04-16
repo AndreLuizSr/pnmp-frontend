@@ -14,9 +14,9 @@ const UserCreate  = Loadable(lazy(() => import("../views/user/UserCreate")));
 const UserEdit  = Loadable(lazy(() => import("../views/user/UserEdit")));
 
 /***** Permission Pages ****/
-const Permission = Loadable(lazy(() => import("../views/permission/permission")));
-const CreatePermission = Loadable(lazy(() => import("../views/permission/create/createPermission")));
-const EditPermission = Loadable(lazy(() => import("../views/permission/edit/editPermission")));
+const Permission = Loadable(lazy(() => import("../views/permission/Permission")));
+const PermissionCreate = Loadable(lazy(() => import("../views/permission/PermissionCreate")));
+const PermissionEdit = Loadable(lazy(() => import("../views/permission/PermissionEdit")));
 
 /***** Auth Pages ****/
 const Error = Loadable(lazy(() => import("../views/auth/Error")));
@@ -37,8 +37,8 @@ const ThemeRoutes = [
 
       /***** Permission Pages ****/
       { path: "/permission", exact: true, element: <Permission/> },
-      { path: "/createPermission", exact: true, element: <CreatePermission/> },
-      { path: "/editPermission/:name", exact: true, element: <EditPermission /> },
+      { path: "/permission/create", exact: true, element: <PermissionCreate/> },
+      { path: "/permission/edit/:_id", exact: true, element: <PermissionEdit /> },
       
       { path: "*", element: <Navigate to="/auth/404" /> },
     ],

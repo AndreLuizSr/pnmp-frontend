@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -14,16 +15,27 @@ import {
 } from 'reactstrap';
 import axios from 'axios';
 
-const CreatePermission = () => {
+const PermissionCreate = () => {
     const [roles, setRoles] = useState([]);
     const [name, setName] = useState('');
-    const navigate = useNavigate();
     const [selectedRoles, setSelectedRoles] = useState([]);
+    const [nameError, setNameError] = useState('');
+    const [rolesError, setRolesError] = useState('');
+    const [validaterNames , setValidaterNames] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
+        axios.get(`http://localhost:3000/permission`)
+            .then(response => {
+                setValidaterNames(response.data.map(permission => permission.name));
+            })
+            .catch(error => {
+                console.error('Erro ao buscar as funções:', error);
+            });
         axios.get(`http://localhost:3000/roles`)
             .then(response => {
                 setRoles(response.data);
+                setValidaterNames(response.data.map(permission => permission.name));
             })
             .catch(error => {
                 console.error('Erro ao buscar as funções:', error);
@@ -37,25 +49,37 @@ const CreatePermission = () => {
             setSelectedRoles([...selectedRoles, roleId]);
         }
     };
+    
+    const nameVerifcate = (existingNames) => {
+        return existingNames.includes(name);
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        
-        try {
-            axios.post(`http://localhost:3000/permission/`, {
-                name,
-                roles: selectedRoles
-            })
-            .then(response => {
-                console.log('Permissão criada com sucesso:', response.data);
-                navigate('/permission');
-            })
-            .catch(error => {
-                console.error('Erro ao criar permissão:', error);
-            });
-        } catch (error) {
-            console.error('Erro ao criar permissão:', error);
+        if (!name || name.trim() === '' || nameVerifcate(validaterNames)) {
+            setNameError('Nome é obrigatório ou já existe');
+            return;
+        } else {
+            setNameError('');
         }
+        if (selectedRoles.length === 0) {
+            setRolesError('Pelo menos uma role deve ser especificada');
+            return;
+        } else {
+            setRolesError('');
+        }
+        axios.post(`http://localhost:3000/permission/`, {
+            name,
+            roles: selectedRoles
+        })
+        .then(response => {
+            console.log('Permissão criada com sucesso:', response.data);
+            navigate('/permission');
+        })
+        .catch(error => {
+            console.log()
+            console.error('Erro ao criar permissão:', error);
+        });
     };
 
     return (
@@ -77,10 +101,11 @@ const CreatePermission = () => {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                 />
+                                {nameError && <span className="text-danger">{nameError}</span>}
                             </FormGroup>
                             <FormGroup>
                                 <Label for="Roles">Roles</Label>
-                                {roles.map((role, index) => (
+                                {roles.map((role) => (
                                     <FormGroup check key={role.key}>
                                         <Input
                                             type="checkbox"
@@ -93,6 +118,7 @@ const CreatePermission = () => {
                                         </Label>
                                     </FormGroup>
                                 ))}
+                                {rolesError && <span className="text-danger">{rolesError}</span>}
                             </FormGroup>
                             <Button type="submit">Submit</Button>
                         </Form>
@@ -103,4 +129,4 @@ const CreatePermission = () => {
     );
 };
 
-export default CreatePermission;
+export default PermissionCreate;

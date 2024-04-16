@@ -21,10 +21,10 @@ const Permission = () => {
       });
   };
 
-  const handleDeletePermission = (name) => {
-    axios.delete(`http://localhost:3000/permission/${name}`)
+  const handleDeletePermission = (_id) => {
+    axios.delete(`http://localhost:3000/permission/${_id}`)
         .then(() => {
-            console.log(`Permissão ${name} excluída com sucesso`);
+            console.log(`Permissão ${_id} excluída com sucesso`);
             fetchPermissions();
         })
         .catch(error => {
@@ -40,7 +40,7 @@ const Permission = () => {
             Table Permission
           </CardTitle>    
           <CardBody className="">
-            <NavLink to="/createPermission" className="btn btn-success btn-sm ml-3 mb-3">
+            <NavLink to="/permission/create" className="btn btn-success btn-sm ml-3 mb-3">
               Adicionar
             </NavLink>
             <Table responsive>
@@ -57,10 +57,10 @@ const Permission = () => {
                     <th scope="row">{index + 1}</th>
                     <td>{permission.name}</td>
                     <td>
-                      <NavLink to={`/editPermission/${permission.name}`} className="btn btn-primary btn-sm mr-2">
+                      <NavLink to={`/permission/edit/${permission._id}`} className="btn btn-primary btn-sm mr-2">
                       <Icon.Edit/>
                       </NavLink>
-                      <Button color="danger" size="sm" onClick={() => handleDeletePermission(permission.name)}>
+                      <Button color="danger" size="sm" onClick={() => handleDeletePermission(permission._id)}>
                       <Icon.Trash/>
                       </Button>
                     </td>

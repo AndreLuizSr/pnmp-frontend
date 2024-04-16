@@ -14,16 +14,31 @@ import {
 } from 'reactstrap';
 import axios from 'axios';
 
-const EditPermission = () => {
-    const { name } = useParams();
-    const navigate = useNavigate();
+const PermissionEdit = () => {
+    const { _id } = useParams();
+    const [name, setName] = useState('');
+    const [originalName, setOriginalName] = useState('');
     const [roles, setRoles] = useState([]);
     const [selectedRoles, setSelectedRoles] = useState([]);
+    const [nameError, setNameError] = useState('');
+    const [rolesError, setRolesError] = useState('');
+    const [existingNames, setExistingNames] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/permission/${name}`)
+        axios.get(`http://localhost:3000/permission`)
             .then(response => {
-                const{roles} = response.data;
+                setExistingNames(response.data.map(permission => permission.name));
+            })
+            .catch(error => {
+                console.error('Erro ao buscar as permissões:', error);
+            });
+
+        axios.get(`http://localhost:3000/permission/${_id}`)
+            .then(response => {
+                const { name, roles } = response.data;
+                setName(name);
+                setOriginalName(name);
                 setSelectedRoles(roles);
             })
             .catch(error => {
@@ -37,26 +52,40 @@ const EditPermission = () => {
             .catch(error => {
                 console.error('Erro ao buscar as funções:', error);
             });
-    }, [name]);
-    
+    }, [_id]);
+
+    const nameVerify = (existingNames, currentName, originalName) => {
+        return existingNames.includes(currentName) && currentName !== originalName;
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        try {
-            axios.put(`http://localhost:3000/permission/${name}`, {
-                name,
-                roles: selectedRoles
-            })
-                .then(response => {
-                    console.log('Permissão atualizada com sucesso:', response.data);
-                    navigate('/permission');
-                })
-                .catch(error => {
-                    console.error('Erro ao atualizar permissão:', error);
-                });
-        } catch (error) {
-            console.error('Erro ao atualizar permissão:', error);
+        if (!name || name.trim() === '' || nameVerify(existingNames, name, originalName)) {
+            setNameError('O campo de nome é obrigatório ou já existe');
+            return;
+        } else {
+            setNameError('');
         }
+
+        if (selectedRoles.length === 0) {
+            setRolesError('Pelo menos uma role deve ser especificada');
+            return;
+        } else {
+            setRolesError('');
+        }
+
+        axios.put(`http://localhost:3000/permission/${_id}`, {
+            name,
+            roles: selectedRoles
+        })
+        .then(response => {
+            console.log('Permissão atualizada com sucesso:', response.data);
+            navigate('/permission');
+        })
+        .catch(error => {
+            console.error('Erro ao atualizar permissão:', error);
+        });
     };
 
     const handleRoleChange = (roleId) => {
@@ -83,8 +112,9 @@ const EditPermission = () => {
                                     name="name"
                                     type="text"
                                     value={name}
-                                    disabled
+                                    onChange={(e) => setName(e.target.value)}
                                 />
+                                {nameError && <span className="text-danger">{nameError}</span>}
                             </FormGroup>
                             <FormGroup>
                                 <Label for="Roles">Roles</Label>
@@ -101,6 +131,7 @@ const EditPermission = () => {
                                         </Label>
                                     </FormGroup>
                                 ))}
+                                {rolesError && <span className="text-danger">{rolesError}</span>}
                             </FormGroup>
                             <Button type="submit">Submit</Button>
                         </Form>
@@ -111,4 +142,4 @@ const EditPermission = () => {
     );
 };
 
-export default EditPermission;
+export default PermissionEdit;
