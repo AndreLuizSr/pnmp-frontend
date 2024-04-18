@@ -10,13 +10,18 @@ const Dashboard = Loadable(lazy(() => import("../views/Dashboard")));
 
 /***** User Pages ****/
 const User = Loadable(lazy(() => import("../views/user/Users")));
-const UserCreate  = Loadable(lazy(() => import("../views/user/UserCreate")));
-const UserEdit  = Loadable(lazy(() => import("../views/user/UserEdit")));
+const UserCreate = Loadable(lazy(() => import("../views/user/UserCreate")));
+const UserEdit = Loadable(lazy(() => import("../views/user/UserEdit")));
 
 /***** Permission Pages ****/
 const Permission = Loadable(lazy(() => import("../views/permission/Permission")));
 const PermissionCreate = Loadable(lazy(() => import("../views/permission/PermissionCreate")));
 const PermissionEdit = Loadable(lazy(() => import("../views/permission/PermissionEdit")));
+
+/***** Units Pages ****/
+const Units = Loadable(lazy(() => import("../views/units/Units")))
+const UnitsStates = Loadable(lazy(() => import("../views/units/UnitsStates")))
+const UnitsCity = Loadable(lazy(() => import("../views/units/UnitsCity")))
 
 /***** Auth Pages ****/
 const Error = Loadable(lazy(() => import("../views/auth/Error")));
@@ -31,15 +36,21 @@ const ThemeRoutes = [
       { path: "/dashboard", exact: true, element: <Dashboard /> },
 
       /***** User Pages ****/
-      { path: "/user", exact: true, element: <User/> },
-      { path: "/user/create", exact: true, element: <UserCreate /> },    
-      { path: "/user/edit/:_id", exact: true, element: <UserEdit /> },    
+      { path: "/user", exact: true, element: <User /> },
+      { path: "/user/create", exact: true, element: <UserCreate /> },
+      { path: "/user/edit/:_id", exact: true, element: <UserEdit /> },
 
       /***** Permission Pages ****/
-      { path: "/permission", exact: true, element: <Permission/> },
-      { path: "/permission/create", exact: true, element: <PermissionCreate/> },
+      { path: "/permission", exact: true, element: <Permission /> },
+      { path: "/permission/create", exact: true, element: <PermissionCreate /> },
       { path: "/permission/edit/:_id", exact: true, element: <PermissionEdit /> },
-      
+
+      /***** Units Pages ****/
+      { path: "/units", exact: true, element: <Units /> },
+      { path: "/unitsStates", exact: true, element: <UnitsStates /> },
+      { path: "/unitsCity", exact: true, element: <UnitsCity /> },
+
+
       { path: "*", element: <Navigate to="/auth/404" /> },
     ],
   },
