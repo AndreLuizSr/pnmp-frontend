@@ -39,7 +39,7 @@ const UnitsStates = () => {
             <Col lg="12">
                 <Card>
                     <CardTitle tag="h4" className="border-bottom p-3 mb-0">
-                        Table Permission
+                    Estados das Unidades Administrativas
                     </CardTitle>
                     <CardBody className="">
                     <BreadCrumbs />
