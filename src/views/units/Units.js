@@ -16,7 +16,6 @@ const Units = () => {
     const fetchUnits = () => {
         axios.get("http://localhost:3000/units")
             .then(response => {
-                // Filtrar apenas as unidades que têm type igual a "Estado"
                 const stateUnits = response.data.filter(unit => unit.type === "Região");
                 setUnits(stateUnits);
             })
@@ -45,7 +44,7 @@ const Units = () => {
                     </CardTitle>
                     <CardBody className="">
                         <BreadCrumbs />
-                        <NavLink to="/permission/create" className="btn btn-success btn-sm ml-3 mb-3">
+                        <NavLink to="/units/create" className="btn btn-success btn-sm ml-3 mb-3">
                             Adicionar 
                         </NavLink>
                         <Table responsive>

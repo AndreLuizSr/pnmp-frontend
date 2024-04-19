@@ -44,7 +44,7 @@ const UnitsStates = () => {
                     
                     <CardBody className="">
                         <BreadCrumbs />
-                        <NavLink to="/permission/create" className="btn btn-success btn-sm ml-3 mb-3">
+                        <NavLink to="/units/create" className="btn btn-success btn-sm ml-3 mb-3">
                             Adicionar
                         </NavLink>
                         <Table responsive>

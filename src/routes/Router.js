@@ -22,6 +22,7 @@ const PermissionEdit = Loadable(lazy(() => import("../views/permission/Permissio
 const Units = Loadable(lazy(() => import("../views/units/Units")))
 const UnitsStates = Loadable(lazy(() => import("../views/units/UnitsStates")))
 const UnitsCity = Loadable(lazy(() => import("../views/units/UnitsCity")))
+const UnitsCreate = Loadable(lazy(() => import("../views/units/UnitsCreate")))
 
 /***** Auth Pages ****/
 const Error = Loadable(lazy(() => import("../views/auth/Error")));
@@ -49,6 +50,7 @@ const ThemeRoutes = [
       { path: "/units", exact: true, element: <Units /> },
       { path: "/unitsStates", exact: true, element: <UnitsStates /> },
       { path: "/unitsCity", exact: true, element: <UnitsCity /> },
+      { path: "/units/create", exact: true, element: <UnitsCreate /> },
 
 
       { path: "*", element: <Navigate to="/auth/404" /> },
