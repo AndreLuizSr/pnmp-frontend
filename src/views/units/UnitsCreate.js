@@ -19,73 +19,59 @@ const UnitsCreate = () => {
 
   const navigate = useNavigate();
   const [code, setCode] = useState('');
-  const [codeError, setCodeError] = useState('');
   const [existingCode, setExistingCode] = useState([]);
   const [name, setName] = useState('');
   const [parent_unit, setParentUnit] = useState('');
-  const [parentUnitError, setParentUnitError] = useState('');
-  const [existingParentUnit, setExistingParentUnit] = useState([]);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     axios.get(`http://localhost:3000/units`)
       .then(response => {
         setExistingCode(response.data.map(units => units.code));
-        setExistingParentUnit(response.data.map(units => units.parent_unit));
       })
       .catch(error => {
-        console.error('Erro ao buscar os unidade:', error);
+        console.error('Erro ao buscar as unidades:', error);
       });
+
   }, []);
 
   const codeVerify = (existingCode, currentCode) => {
     return existingCode.includes(currentCode);
   };
-  const parentUnitVerify = (existingParentUnit, currentParentUnit) =>{
-    return existingParentUnit.includes(currentParentUnit);
-  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const newErrors = {};
-    if (!code || code.trim() === '' || codeVerify(existingCode, code)) {
-      setCodeError('Codigo é obrigatório ou já existe')
-      return;
-    } else {
-      setCodeError('');
-    }
-    if (parent_unit || !parent_unit.trim() === '' || !parentUnitVerify(existingParentUnit, parent_unit)) {
-      setParentUnitError('Unidade Parental não existe!')
-      return;
-    } else {
-      setParentUnitError('');
-    }
+
     if (!name.trim()) {
-      newErrors.name = 'Nome é obrigatorio!';
+      newErrors.name = 'Nome inválido';
     }
+
+    if (!code || code.trim() === '' || codeVerify(existingCode, code)) {
+      newErrors.code = 'Código inválido';
+    }
+
+    if (parent_unit !== "" && !existingCode.includes(parent_unit)) {
+      newErrors.parent_unit = 'Unidade parental inválida';
+    }
+
     if (Object.keys(newErrors).length === 0) {
       try {
-        axios.post(`http://localhost:3000/units/`, {
+        const response = await axios.post(`http://localhost:3000/units/`, {
           name,
           code,
           parent_unit,
-        })
-          .then(response => {
-            console.log('Unidade criada com sucesso:', response.data);
-            navigate('/units');
-          })
-          .catch(error => {
-            console.error('Erro ao criar usuário:', error);
-          });
+        });
+        console.log('Unidade criada com sucesso:', response.data);
+        navigate('/units');
       } catch (error) {
-        console.error('Erro ao criar usuário:', error);
+        console.error('Erro ao criar unidade:', error);
       }
     } else {
       setErrors(newErrors);
     }
   };
-
 
   return (
     <Row>
@@ -97,23 +83,23 @@ const UnitsCreate = () => {
           <CardBody>
             <Form onSubmit={handleSubmit}>
               <FormGroup>
-                <Label for="code">Codigo*</Label>
+                <Label for="code">Código*</Label>
                 <Input
                   id="code"
                   name="code"
-                  type="string"
+                  type="text"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  invalid={!!codeError}
+                  invalid={!!errors.code}
                 />
-                {codeError && <FormFeedback>{codeError}</FormFeedback>}
+                {errors.code && <FormFeedback>{errors.code}</FormFeedback>}
               </FormGroup>
               <FormGroup>
                 <Label for="name">Nome*</Label>
                 <Input
                   id="name"
                   name="name"
-                  type="string"
+                  type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   invalid={!!errors.name}
@@ -125,15 +111,14 @@ const UnitsCreate = () => {
                 <Input
                   id="parentUnit"
                   name="parentUnit"
-                  type="string"
+                  type="text"
                   value={parent_unit}
-                  onChange={(e)=> setParentUnit(e.target.value)}
-                  invalid={!!parentUnitError}
+                  onChange={(e) => setParentUnit(e.target.value)}
+                  invalid={!!errors.parent_unit}
                 />
-                 {parentUnitError && <FormFeedback>{parentUnitError}</FormFeedback>}
+                {errors.parent_unit && <FormFeedback>{errors.parent_unit}</FormFeedback>}
               </FormGroup>
-
-              <Button>Submit</Button>
+              <Button type="submit">Submit</Button>
             </Form>
           </CardBody>
         </Card>
@@ -141,4 +126,5 @@ const UnitsCreate = () => {
     </Row>
   );
 }
+
 export default UnitsCreate;
