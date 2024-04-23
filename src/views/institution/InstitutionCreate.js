@@ -49,10 +49,8 @@ const InstitutionCreate = () => {
 
     const handleTypeChange = (option) => {
         if (type.includes(option)) {
-            // Se a opção já estiver selecionada, remova-a do array
             setType(type.filter(item => item !== option));
         } else {
-            // Se a opção não estiver selecionada, adicione-a ao array
             setType([...type, option]);
         }
     };
@@ -61,19 +59,8 @@ const InstitutionCreate = () => {
         return existingCode.includes(currentCode);
     };
 
-
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log("Formulário submetido com os seguintes dados:");
-        console.log("Código:", code);
-        console.log("Nome:", name);
-        console.log("Telefone:", phone);
-        console.log("Endereço Linha 1:", addressLine1);
-        console.log("Endereço Linha 2:", addressLine2);
-        console.log("Código Postal:", postalCode);
-        console.log("Unidade:", unit);
-        console.log("Tipo:", type);
-
         const newErrors = {};
         if (!code.trim()) {
             newErrors.code = 'Code is required';
@@ -168,7 +155,7 @@ const InstitutionCreate = () => {
                                 {errors.phone && <FormFeedback>{errors.phone}</FormFeedback>}
                             </FormGroup>
                             <FormGroup>
-                                <Label for="AddressLine1">Address Line 1</Label>
+                                <Label for="AddressLine1">Address 1</Label>
                                 <Input
                                     id="AddressLine1"
                                     name="addressLine1"
@@ -178,7 +165,7 @@ const InstitutionCreate = () => {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label for="AddressLine2">Address Line 2</Label>
+                                <Label for="AddressLine2">Address 2</Label>
                                 <Input
                                     id="AddressLine2"
                                     name="addressLine2"

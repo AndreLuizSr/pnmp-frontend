@@ -6,9 +6,11 @@ import * as Icon from "react-feather";
 
 const Institutions = () => {
   const [institutions, setInstitutions] = useState([]);
-  
+  const [units, setUnits] = useState({});
+
   useEffect(() => {
     fetchPermissions();
+    fetchUnits();
   }, []);
 
   const fetchPermissions = () => {
@@ -18,6 +20,20 @@ const Institutions = () => {
       })
       .catch(error => {
         console.error('Erro ao buscar os dados:', error);
+      });
+  };
+
+  const fetchUnits = () => {
+    axios.get("http://localhost:3000/units")
+      .then(response => {
+        const unitsData = response.data.reduce((acc, unit) => {
+          acc[unit.code] = unit.name;
+          return acc;
+        }, {});
+        setUnits(unitsData);
+      })
+      .catch(error => {
+        console.error('Erro ao buscar os dados das unidades:', error);
       });
   };
 
@@ -53,6 +69,7 @@ const Institutions = () => {
                   <th>Address - 1</th>
                   <th>Address - 2</th>
                   <th>Postal Code</th>
+                  <th>City</th>
                   <th>type</th>
                 </tr>
               </thead>
@@ -66,7 +83,8 @@ const Institutions = () => {
                     <td>{institution.address.address_line_1}</td>
                     <td>{institution.address.address_line_2}</td>
                     <td>{institution.address.postal_code}</td>
-                    <td>{institution.type}</td>
+                    <td>{units[institution.unit]}</td>
+                    <td>{institution.type.join(' ')}</td>
                     <td>
                       <NavLink to={`/institution/edit/${institution._id}`} className="btn btn-primary btn-sm mr-2">
                       <Icon.Edit/>
