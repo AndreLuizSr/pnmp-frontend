@@ -25,6 +25,20 @@ const SidebarData = [
     icon: <Icon.CheckSquare />,
     id: 3,
     collapisble: false,
+  },
+  {
+    title: "Units",
+    href: "/units",
+    icon: <Icon.Globe />,
+    id: 4,
+    collapisble: false,
+  },
+  {
+    title: "Institutions",
+    href: "/institution",
+    icon: <Icon.Grid />,
+    id: 5,
+    collapisble: false,
   }
 ];
 

@@ -25,6 +25,12 @@ const UnitsCity = Loadable(lazy(() => import("../views/units/UnitsCity")))
 const UnitsCreate = Loadable(lazy(() => import("../views/units/UnitsCreate")))
 const UnitsEdit = Loadable(lazy(() => import("../views/units/UnitsEdit")))
 
+/***** Institutions Pages ****/
+const Institution = Loadable(lazy(() => import("../views/institution/Institution")));
+const InstitutionCreate = Loadable(lazy(() => import("../views/institution/InstitutionCreate")));
+const InstitutionEdit = Loadable(lazy(() => import("../views/institution/InstitutionEdit")));
+
+
 /***** Auth Pages ****/
 const Error = Loadable(lazy(() => import("../views/auth/Error")));
 /*****Routes******/
@@ -54,6 +60,10 @@ const ThemeRoutes = [
       { path: "/units/create", exact: true, element: <UnitsCreate /> },
       { path: "/units/edit/:_id", exact: true, element: <UnitsEdit /> },
 
+      /***** Institutions Pages ****/
+      { path: "/institution", exact: true, element: <Institution /> },
+      { path: "/institution/create", exact: true, element: <InstitutionCreate /> },
+      { path: "/institution/edit/:_id", exact: true, element: <InstitutionEdit /> },
 
       { path: "*", element: <Navigate to="/auth/404" /> },
     ],
