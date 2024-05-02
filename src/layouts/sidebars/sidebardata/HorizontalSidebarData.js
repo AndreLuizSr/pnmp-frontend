@@ -39,6 +39,13 @@ const SidebarData = [
     icon: <Icon.Grid />,
     id: 5,
     collapisble: false,
+  },
+  {
+    title: "Events",
+    href: "/events",
+    icon: <Icon.Clipboard />,
+    id: 6,
+    collapisble: false,
   }
 ];
 

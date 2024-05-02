@@ -30,6 +30,8 @@ const Institution = Loadable(lazy(() => import("../views/institution/Institution
 const InstitutionCreate = Loadable(lazy(() => import("../views/institution/InstitutionCreate")));
 const InstitutionEdit = Loadable(lazy(() => import("../views/institution/InstitutionEdit")));
 
+/***** Events Pages ****/
+const Events = Loadable(lazy(() => import("../views/events/Events")));
 
 /***** Auth Pages ****/
 const Error = Loadable(lazy(() => import("../views/auth/Error")));
@@ -64,6 +66,9 @@ const ThemeRoutes = [
       { path: "/institution", exact: true, element: <Institution /> },
       { path: "/institution/create", exact: true, element: <InstitutionCreate /> },
       { path: "/institution/edit/:_id", exact: true, element: <InstitutionEdit /> },
+
+      /***** Events Pages ****/
+      { path: "/events", exact: true, element: <Events /> },
 
       { path: "*", element: <Navigate to="/auth/404" /> },
     ],
