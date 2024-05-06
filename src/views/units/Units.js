@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Row, Col, Table, Card, CardTitle, CardBody, Button } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../auth/AxiosConfig';
 import * as Icon from "react-feather";
 import BreadCrumbs from '../../layouts/breadcrumbs/BreadCrumbs';
 
@@ -14,7 +14,7 @@ const Units = () => {
     }, []);
 
     const fetchUnits = () => {
-        axios.get("http://localhost:3000/units")
+        axiosInstance.get("http://localhost:3000/units")
             .then(response => {
                 const stateUnits = response.data.filter(unit => unit.type === "Região");
                 setUnits(stateUnits);
@@ -25,7 +25,7 @@ const Units = () => {
     };
 
     const handleDeleteUser = (unit) => {
-        axios.delete(`http://localhost:3000/units/${unit._id}`)
+        axiosInstance.delete(`http://localhost:3000/units/${unit._id}`)
             .then(() => {
                 console.log(`Unidade ${unit._id} excluída com sucesso`);
                 fetchUnits();
@@ -35,17 +35,17 @@ const Units = () => {
             });
     };
     return (
-        
+
         <Row>
             <Col lg="12">
                 <Card>
                     <CardTitle tag="h4" className="border-bottom p-3 mb-0">
-                        Regiões das Unidades Administrativas 
+                        Regiões das Unidades Administrativas
                     </CardTitle>
                     <CardBody className="">
                         <BreadCrumbs />
                         <NavLink to="/units/create" className="btn btn-success btn-sm ml-3 mb-3">
-                            Adicionar 
+                            Adicionar
                         </NavLink>
                         <Table responsive>
                             <thead>

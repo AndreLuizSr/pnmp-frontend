@@ -13,7 +13,7 @@ import {
     Input,
     FormFeedback,
 } from 'reactstrap';
-import axios from 'axios';
+import axiosInstance from '../auth/AxiosConfig';
 
 const InstitutionEdit = () => {
     const { _id } = useParams();
@@ -32,14 +32,14 @@ const InstitutionEdit = () => {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/units`)
+        axiosInstance.get(`http://localhost:3000/units`)
             .then(response => {
                 setUnits(response.data.map(permit => permit.code));
             })
             .catch(error => {
                 console.error('Error:', error);
             });
-        axios.get(`http://localhost:3000/institutions`)
+        axiosInstance.get(`http://localhost:3000/institutions`)
             .then(response => {
                 setInstitution(response.data.map(inst => inst.code));
             })
@@ -47,7 +47,7 @@ const InstitutionEdit = () => {
                 console.error('Error:', error);
             });
 
-        axios.get(`http://localhost:3000/institutions/${_id}`)
+        axiosInstance.get(`http://localhost:3000/institutions/${_id}`)
             .then(response => {
                 const data = response.data;
                 setCode(data.code);
@@ -100,13 +100,13 @@ const InstitutionEdit = () => {
         }
         if (!unit.trim() || (units.length > 0 && !units.includes(unit))) {
             newErrors.unit = 'Unit does not exist';
-        }      
+        }
         if (type.length === 0) {
             newErrors.type = 'Type is required';
         }
         if (Object.keys(newErrors).length === 0) {
             try {
-                axios.put(`http://localhost:3000/institutions/${_id}`, {
+                axiosInstance.put(`http://localhost:3000/institutions/${_id}`, {
                     code,
                     name,
                     phone,

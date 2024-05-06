@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Row, Col, Table, Card, CardTitle, CardBody, Button } from 'reactstrap';
-import axios from 'axios'; 
 import { NavLink } from 'react-router-dom';
 import * as Icon from "react-feather";
+import axiosInstance from '../auth/AxiosConfig';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -12,7 +12,7 @@ const Users = () => {
   }, []);
 
   const fetchPermissions = () => {
-    axios.get("http://localhost:3000/users")
+    axiosInstance.get("/users")
       .then(response => {
         setUsers(response.data);
       })
@@ -22,7 +22,7 @@ const Users = () => {
   };
 
   const handleDeleteUser = (user) => {
-    axios.delete(`http://localhost:3000/users/${user._id}`)
+    axiosInstance.delete(`/users/${user._id}`)
         .then(() => {
             console.log(`Usuário ${user.email} excluído(a) com sucesso`);
             fetchPermissions();

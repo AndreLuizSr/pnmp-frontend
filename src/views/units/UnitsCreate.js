@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../auth/AxiosConfig';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -25,7 +25,7 @@ const UnitsCreate = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/units`)
+    axiosInstance.get(`http://localhost:3000/units`)
       .then(response => {
         setExistingCode(response.data.map(units => units.code));
       })
@@ -58,7 +58,7 @@ const UnitsCreate = () => {
 
     if (Object.keys(newErrors).length === 0) {
       try {
-        const response = await axios.post(`http://localhost:3000/units/`, {
+        const response = await axiosInstance.post(`http://localhost:3000/units/`, {
           name,
           code,
           parent_unit,

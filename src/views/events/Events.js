@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Row, Col, Table, Card, CardTitle, CardBody } from 'reactstrap';
-import axios from 'axios'; 
+import axiosInstance from '../auth/AxiosConfig';
 import { NavLink } from 'react-router-dom';
 
 const Institutions = () => {
@@ -11,7 +11,7 @@ const Institutions = () => {
   }, []);
 
   const fetchEvents = () => {
-    axios.get("http://localhost:3000/events")
+    axiosInstance.get("http://localhost:3000/events")
       .then(response => {
         setEvents(response.data);
       })
@@ -26,14 +26,14 @@ const Institutions = () => {
         <Card>
           <CardTitle tag="h4" className="border-bottom p-3 mb-0">
             Table Events
-          </CardTitle>    
+          </CardTitle>
           <CardBody className="">
             <NavLink to="/institution/create" className="btn btn-success btn-sm ml-3 mb-3">
               Adicionar
             </NavLink>
             <Table responsive>
               <thead>
-              <tr>
+                <tr>
                   <th>#</th>
                   <th>Type</th>
                   <th>Name</th>

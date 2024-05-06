@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Row, Col, Table, Card, CardTitle, CardBody, Button } from 'reactstrap';
-import axios from 'axios'; 
+import axiosInstance from '../auth/AxiosConfig';
 import { NavLink } from 'react-router-dom';
 import * as Icon from "react-feather";
 
@@ -14,7 +14,7 @@ const Institutions = () => {
   }, []);
 
   const fetchPermissions = () => {
-    axios.get("http://localhost:3000/institutions")
+    axiosInstance.get("http://localhost:3000/institutions")
       .then(response => {
         setInstitutions(response.data);
       })
@@ -24,7 +24,7 @@ const Institutions = () => {
   };
 
   const fetchUnits = () => {
-    axios.get("http://localhost:3000/units")
+    axiosInstance.get("http://localhost:3000/units")
       .then(response => {
         const unitsData = response.data.reduce((acc, unit) => {
           acc[unit.code] = unit.name;
@@ -38,14 +38,14 @@ const Institutions = () => {
   };
 
   const handleDeletePermission = (_id) => {
-    axios.delete(`http://localhost:3000/institutions/${_id}`)
-        .then(() => {
-            console.log(`Permissão ${_id} excluída com sucesso`);
-            fetchPermissions();
-        })
-        .catch(error => {
-            console.error('Erro ao excluir permissão:', error);
-        });
+    axiosInstance.delete(`http://localhost:3000/institutions/${_id}`)
+      .then(() => {
+        console.log(`Permissão ${_id} excluída com sucesso`);
+        fetchPermissions();
+      })
+      .catch(error => {
+        console.error('Erro ao excluir permissão:', error);
+      });
   };
 
   return (
@@ -54,14 +54,14 @@ const Institutions = () => {
         <Card>
           <CardTitle tag="h4" className="border-bottom p-3 mb-0">
             Table Institutions
-          </CardTitle>    
+          </CardTitle>
           <CardBody className="">
             <NavLink to="/institution/create" className="btn btn-success btn-sm ml-3 mb-3">
               Adicionar
             </NavLink>
             <Table responsive>
               <thead>
-              <tr>
+                <tr>
                   <th>#</th>
                   <th>Code</th>
                   <th>Name</th>
@@ -87,10 +87,10 @@ const Institutions = () => {
                     <td>{institution.type.join(' ')}</td>
                     <td>
                       <NavLink to={`/institution/edit/${institution._id}`} className="btn btn-primary btn-sm mr-2">
-                      <Icon.Edit/>
+                        <Icon.Edit />
                       </NavLink>
                       <Button color="danger" size="sm" onClick={() => handleDeletePermission(institution._id)}>
-                      <Icon.Trash/>
+                        <Icon.Trash />
                       </Button>
                     </td>
                   </tr>

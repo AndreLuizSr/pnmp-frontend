@@ -12,7 +12,7 @@ import {
     Label,
     Input,
 } from 'reactstrap';
-import axios from 'axios';
+import axiosInstance from '../auth/AxiosConfig';
 
 const PermissionEdit = () => {
     const { _id } = useParams();
@@ -26,7 +26,7 @@ const PermissionEdit = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/permission`)
+        axiosInstance.get(`http://localhost:3000/permission`)
             .then(response => {
                 setExistingNames(response.data.map(permission => permission.name));
             })
@@ -34,7 +34,7 @@ const PermissionEdit = () => {
                 console.error('Erro ao buscar as permissões:', error);
             });
 
-        axios.get(`http://localhost:3000/permission/${_id}`)
+        axiosInstance.get(`http://localhost:3000/permission/${_id}`)
             .then(response => {
                 const { name, roles } = response.data;
                 setName(name);
@@ -45,7 +45,7 @@ const PermissionEdit = () => {
                 console.error('Erro ao buscar a permissão:', error);
             });
 
-        axios.get(`http://localhost:3000/roles`)
+        axiosInstance.get(`http://localhost:3000/roles`)
             .then(response => {
                 setRoles(response.data);
             })
@@ -75,17 +75,17 @@ const PermissionEdit = () => {
             setRolesError('');
         }
 
-        axios.put(`http://localhost:3000/permission/${_id}`, {
+        axiosInstance.put(`http://localhost:3000/permission/${_id}`, {
             name,
             roles: selectedRoles
         })
-        .then(response => {
-            console.log('Permissão atualizada com sucesso:', response.data);
-            navigate('/permission');
-        })
-        .catch(error => {
-            console.error('Erro ao atualizar permissão:', error);
-        });
+            .then(response => {
+                console.log('Permissão atualizada com sucesso:', response.data);
+                navigate('/permission');
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar permissão:', error);
+            });
     };
 
     const handleRoleChange = (roleId) => {

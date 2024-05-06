@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../auth/AxiosConfig';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -12,7 +12,7 @@ import {
   FormGroup,
   Label,
   Input,
-  FormFeedback 
+  FormFeedback
 } from 'reactstrap';
 
 const UserCreate = () => {
@@ -26,10 +26,10 @@ const UserCreate = () => {
   const [emailError, setEmailError] = useState('');
   const [existingEmails, setExistingEmails] = useState([]);
   const [selectedPermission, setSelectedPermission] = useState('');
-  const [errors, setErrors] = useState({}); 
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/users`)
+    axiosInstance.get(`http://localhost:3000/users`)
       .then(response => {
         setExistingEmails(response.data.map(user => user.email));
       })
@@ -37,7 +37,7 @@ const UserCreate = () => {
         console.error('Erro ao buscar os usuários:', error);
       });
 
-    axios.get(`http://localhost:3000/permission`)
+    axiosInstance.get(`http://localhost:3000/permission`)
       .then(response => {
         setPermissions(response.data);
       })
@@ -63,7 +63,7 @@ const UserCreate = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const newErrors = {}; 
+    const newErrors = {};
     if (!name.trim()) {
       newErrors.name = 'Name is required';
     }
@@ -76,10 +76,10 @@ const UserCreate = () => {
     if (!institution.trim()) {
       newErrors.institution = 'Institution is required';
     }
-    if (!email || email.trim()==='' || emailVerify(existingEmails, email)) {
+    if (!email || email.trim() === '' || emailVerify(existingEmails, email)) {
       setEmailError('E-mail é obrigatório ou já existe')
       return;
-    } else{
+    } else {
       setEmailError('');
     }
     if (!selectedPermission) {
@@ -88,7 +88,7 @@ const UserCreate = () => {
 
     if (Object.keys(newErrors).length === 0) {
       try {
-        axios.post(`http://localhost:3000/users/`, {
+        axiosInstance.post(`http://localhost:3000/users/`, {
           name,
           password,
           phone,
@@ -107,7 +107,7 @@ const UserCreate = () => {
         console.error('Erro ao criar usuário:', error);
       }
     } else {
-      setErrors(newErrors); 
+      setErrors(newErrors);
     }
   };
 
@@ -129,7 +129,7 @@ const UserCreate = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  invalid={!!errors.name} 
+                  invalid={!!errors.name}
                 />
                 {errors.name && <FormFeedback>{errors.name}</FormFeedback>}
               </FormGroup>

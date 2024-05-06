@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Row, Col, Table, Card, CardTitle, CardBody, Button } from 'reactstrap';
-import axios from 'axios'; 
+import axiosInstance from '../auth/AxiosConfig';
 import { NavLink } from 'react-router-dom';
 import * as Icon from "react-feather";
 
 const Permission = () => {
   const [permissions, setPermissions] = useState([]);
-  
+
   useEffect(() => {
     fetchPermissions();
   }, []);
 
   const fetchPermissions = () => {
-    axios.get("http://localhost:3000/permission")
+    axiosInstance.get("http://localhost:3000/permission")
       .then(response => {
         setPermissions(response.data);
       })
@@ -22,14 +22,14 @@ const Permission = () => {
   };
 
   const handleDeletePermission = (_id) => {
-    axios.delete(`http://localhost:3000/permission/${_id}`)
-        .then(() => {
-            console.log(`Permissão ${_id} excluída com sucesso`);
-            fetchPermissions();
-        })
-        .catch(error => {
-            console.error('Erro ao excluir permissão:', error);
-        });
+    axiosInstance.delete(`http://localhost:3000/permission/${_id}`)
+      .then(() => {
+        console.log(`Permissão ${_id} excluída com sucesso`);
+        fetchPermissions();
+      })
+      .catch(error => {
+        console.error('Erro ao excluir permissão:', error);
+      });
   };
 
   return (
@@ -38,7 +38,7 @@ const Permission = () => {
         <Card>
           <CardTitle tag="h4" className="border-bottom p-3 mb-0">
             Table Permission
-          </CardTitle>    
+          </CardTitle>
           <CardBody className="">
             <NavLink to="/permission/create" className="btn btn-success btn-sm ml-3 mb-3">
               Adicionar
@@ -58,10 +58,10 @@ const Permission = () => {
                     <td>{permission.name}</td>
                     <td>
                       <NavLink to={`/permission/edit/${permission._id}`} className="btn btn-primary btn-sm mr-2">
-                      <Icon.Edit/>
+                        <Icon.Edit />
                       </NavLink>
                       <Button color="danger" size="sm" onClick={() => handleDeletePermission(permission._id)}>
-                      <Icon.Trash/>
+                        <Icon.Trash />
                       </Button>
                     </td>
                   </tr>

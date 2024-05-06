@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../auth/AxiosConfig';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -29,7 +29,7 @@ const UserEdit = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/users`)
+        axiosInstance.get(`http://localhost:3000/users`)
             .then(response => {
                 setExistingEmails(response.data.map(user => user.email));
             })
@@ -37,7 +37,7 @@ const UserEdit = () => {
                 console.error('Erro ao buscar os usuários:', error);
             });
 
-        axios.get(`http://localhost:3000/users/${_id}`)
+        axiosInstance.get(`http://localhost:3000/users/${_id}`)
             .then(response => {
                 const { name, password, email, phone, institution, permission } = response.data;
                 setName(name);
@@ -52,7 +52,7 @@ const UserEdit = () => {
                 console.error('Erro ao buscar dados do usuário:', error);
             });
 
-        axios.get(`http://localhost:3000/permission`)
+        axiosInstance.get(`http://localhost:3000/permission`)
             .then(response => {
                 setPermissionOptions(response.data.map(permit => permit.name));
             })
@@ -88,7 +88,7 @@ const UserEdit = () => {
 
         if (Object.keys(newErrors).length === 0) {
             try {
-                const response = await axios.put(`http://localhost:3000/users/${_id}`, {
+                const response = await axiosInstance.put(`http://localhost:3000/users/${_id}`, {
                     name,
                     password,
                     email,

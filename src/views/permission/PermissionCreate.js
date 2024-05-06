@@ -13,7 +13,7 @@ import {
     Label,
     Input,
 } from 'reactstrap';
-import axios from 'axios';
+import axiosInstance from '../auth/AxiosConfig';
 
 const PermissionCreate = () => {
     const [roles, setRoles] = useState([]);
@@ -21,18 +21,18 @@ const PermissionCreate = () => {
     const [selectedRoles, setSelectedRoles] = useState([]);
     const [nameError, setNameError] = useState('');
     const [rolesError, setRolesError] = useState('');
-    const [validaterNames , setValidaterNames] = useState('');
+    const [validaterNames, setValidaterNames] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/permission`)
+        axiosInstance.get(`http://localhost:3000/permission`)
             .then(response => {
                 setValidaterNames(response.data.map(permission => permission.name));
             })
             .catch(error => {
                 console.error('Erro ao buscar as funções:', error);
             });
-        axios.get(`http://localhost:3000/roles`)
+        axiosInstance.get(`http://localhost:3000/roles`)
             .then(response => {
                 setRoles(response.data);
                 setValidaterNames(response.data.map(permission => permission.name));
@@ -49,7 +49,7 @@ const PermissionCreate = () => {
             setSelectedRoles([...selectedRoles, roleId]);
         }
     };
-    
+
     const nameVerifcate = (existingNames) => {
         return existingNames.includes(name);
     };
@@ -68,18 +68,18 @@ const PermissionCreate = () => {
         } else {
             setRolesError('');
         }
-        axios.post(`http://localhost:3000/permission/`, {
+        axiosInstance.post(`http://localhost:3000/permission/`, {
             name,
             roles: selectedRoles
         })
-        .then(response => {
-            console.log('Permissão criada com sucesso:', response.data);
-            navigate('/permission');
-        })
-        .catch(error => {
-            console.log()
-            console.error('Erro ao criar permissão:', error);
-        });
+            .then(response => {
+                console.log('Permissão criada com sucesso:', response.data);
+                navigate('/permission');
+            })
+            .catch(error => {
+                console.log()
+                console.error('Erro ao criar permissão:', error);
+            });
     };
 
     return (

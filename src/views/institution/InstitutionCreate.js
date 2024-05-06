@@ -14,7 +14,7 @@ import {
     Input,
     FormFeedback,
 } from 'reactstrap';
-import axios from 'axios';
+import axiosInstance from '../auth/AxiosConfig';
 
 const InstitutionCreate = () => {
     const [institution, setInstitution] = useState([]);
@@ -31,14 +31,14 @@ const InstitutionCreate = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/units`)
+        axiosInstance.get(`http://localhost:3000/units`)
             .then(response => {
                 setUnits(response.data.map(unit => unit.code));
             })
             .catch(error => {
                 console.error('Error:', error);
             });
-        axios.get(`http://localhost:3000/institutions`)
+        axiosInstance.get(`http://localhost:3000/institutions`)
             .then(response => {
                 setInstitution(response.data.map(inst => inst.code));
             })
@@ -82,7 +82,7 @@ const InstitutionCreate = () => {
         }
         if (Object.keys(newErrors).length === 0) {
             try {
-                axios.post(`http://localhost:3000/institutions`, {
+                axiosInstance.post(`http://localhost:3000/institutions`, {
                     code,
                     name,
                     phone,

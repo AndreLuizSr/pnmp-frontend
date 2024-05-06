@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../auth/AxiosConfig';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -27,14 +27,14 @@ const UnitsEdit = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/units`)
+    axiosInstance.get(`http://localhost:3000/units`)
       .then(response => {
         setExistingCode(response.data.map(units => units.code));
       })
       .catch(error => {
         console.error('Erro ao buscar os unidade:', error);
       });
-    axios.get(`http://localhost:3000/units/${_id}`)
+    axiosInstance.get(`http://localhost:3000/units/${_id}`)
       .then(response => {
         const { code, name, parent_unit } = response.data;
         setCode(code);
@@ -53,11 +53,11 @@ const UnitsEdit = () => {
   const parentVerify = () => {
     return parent_unit !== originalCode || parent_unit === "";
   };
-  
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     const newErrors = {};
     if (!code || code.trim() === '' || codeVerify(existingCode, code, originalCode)) {
       newErrors.code = 'Código inválido';
@@ -70,12 +70,12 @@ const UnitsEdit = () => {
     }
     if (Object.keys(newErrors).length === 0) {
       try {
-        const response = await axios.put(`http://localhost:3000/units/${_id}`, {
+        const response = await axiosInstance.put(`http://localhost:3000/units/${_id}`, {
           code,
           name,
           parent_unit
         });
-  
+
         console.log('Unit updated successfully:', response.data);
         navigate('/units');
       } catch (error) {
@@ -85,7 +85,7 @@ const UnitsEdit = () => {
       setErrors(newErrors);
     }
   };
-  
+
 
   return (
     <Row>

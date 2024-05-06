@@ -35,6 +35,7 @@ const Events = Loadable(lazy(() => import("../views/events/Events")));
 
 /***** Auth Pages ****/
 const Error = Loadable(lazy(() => import("../views/auth/Error")));
+const LoginFormik = Loadable(lazy(() => import('../views/auth/LoginFormik')));
 /*****Routes******/
 
 const ThemeRoutes = [
@@ -79,6 +80,7 @@ const ThemeRoutes = [
     children: [
       { path: "404", element: <Error /> },
       { path: "*", element: <Navigate to="/auth/404" /> },
+      { path: 'login', element: <LoginFormik /> },
     ],
   },
 ];
