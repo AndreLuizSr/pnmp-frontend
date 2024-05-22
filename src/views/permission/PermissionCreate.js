@@ -27,7 +27,7 @@ const PermissionCreate = () => {
     useEffect(() => {
         axiosInstance.get(`http://localhost:3000/permission`)
             .then(response => {
-                setValidaterNames(response.data.map(permission => permission.name));
+                setValidaterNames(response.data.name);
             })
             .catch(error => {
                 console.error('Erro ao buscar as funções:', error);
@@ -35,7 +35,6 @@ const PermissionCreate = () => {
         axiosInstance.get(`http://localhost:3000/roles`)
             .then(response => {
                 setRoles(response.data);
-                setValidaterNames(response.data.map(permission => permission.name));
             })
             .catch(error => {
                 console.error('Erro ao buscar as funções:', error);
@@ -51,8 +50,13 @@ const PermissionCreate = () => {
     };
 
     const nameVerifcate = (existingNames) => {
-        return existingNames.includes(name);
+        if (existingNames) {
+            return existingNames.includes(name);
+        } else {
+            return false;
+        }
     };
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();

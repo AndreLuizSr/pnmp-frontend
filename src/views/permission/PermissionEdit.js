@@ -28,7 +28,7 @@ const PermissionEdit = () => {
     useEffect(() => {
         axiosInstance.get(`http://localhost:3000/permission`)
             .then(response => {
-                setExistingNames(response.data.map(permission => permission.name));
+                setExistingNames(response.data.name);
             })
             .catch(error => {
                 console.error('Erro ao buscar as permissões:', error);
@@ -55,8 +55,13 @@ const PermissionEdit = () => {
     }, [_id]);
 
     const nameVerify = (existingNames, currentName, originalName) => {
-        return existingNames.includes(currentName) && currentName !== originalName;
+        if (existingNames) {
+            return existingNames.includes(currentName) && currentName !== originalName;
+        } else {
+            return false;
+        }
     };
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
