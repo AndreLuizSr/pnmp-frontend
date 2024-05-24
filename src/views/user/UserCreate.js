@@ -23,13 +23,12 @@ const UserCreate = () => {
   const [phone, setPhone] = useState('');
   const [institution, setInstitution] = useState('');
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
   const [existingEmails, setExistingEmails] = useState([]);
   const [selectedPermission, setSelectedPermission] = useState('');
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    axiosInstance.get(`http://localhost:3000/users`)
+    axiosInstance.get('http://localhost:3000/users')
       .then(response => {
         setExistingEmails(response.data.map(user => user.email));
       })
@@ -37,9 +36,10 @@ const UserCreate = () => {
         console.error('Erro ao buscar os usuários:', error);
       });
 
-    axiosInstance.get(`http://localhost:3000/permission`)
+    axiosInstance.get('http://localhost:3000/permission')
       .then(response => {
-        setPermissions(response.data);
+        console.log('Permissões recebidas:', response.data);
+        setPermissions(response.data.permissions || []);
       })
       .catch(error => {
         console.error('Erro ao buscar as permissões:', error);
@@ -77,10 +77,7 @@ const UserCreate = () => {
       newErrors.institution = 'Institution is required';
     }
     if (!email || email.trim() === '' || emailVerify(existingEmails, email)) {
-      setEmailError('E-mail é obrigatório ou já existe')
-      return;
-    } else {
-      setEmailError('');
+      newErrors.email = 'E-mail é obrigatório ou já existe';
     }
     if (!selectedPermission) {
       newErrors.permission = 'Permission is required';
@@ -88,21 +85,15 @@ const UserCreate = () => {
 
     if (Object.keys(newErrors).length === 0) {
       try {
-        axiosInstance.post(`http://localhost:3000/users/`, {
+        await axiosInstance.post('http://localhost:3000/users/', {
           name,
           password,
           phone,
           institution,
           email,
           permission: selectedPermission ? [selectedPermission] : []
-        })
-          .then(response => {
-            console.log('Usuário criado com sucesso:', response.data);
-            navigate('/user');
-          })
-          .catch(error => {
-            console.error('Erro ao criar usuário:', error);
-          });
+        });
+        navigate('/user');
       } catch (error) {
         console.error('Erro ao criar usuário:', error);
       }
@@ -153,16 +144,16 @@ const UserCreate = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  invalid={!!emailError}
+                  invalid={!!errors.email}
                 />
-                {emailError && <FormFeedback>{emailError}</FormFeedback>}
+                {errors.email && <FormFeedback>{errors.email}</FormFeedback>}
               </FormGroup>
               <FormGroup>
                 <Label for="Phone">Phone*</Label>
                 <Input
                   id="Phone"
-                  name="Phone"
-                  type="phone"
+                  name="phone"
+                  type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   invalid={!!errors.phone}
@@ -183,8 +174,8 @@ const UserCreate = () => {
               </FormGroup>
               <FormGroup>
                 <Label for="Permission">Permissions*</Label>
-                {permissions.map((permission, index) => (
-                  <FormGroup check key={index}>
+                {Array.isArray(permissions) && permissions.map((permission) => (
+                  <FormGroup check key={permission._id}>
                     <Input
                       type="checkbox"
                       id={`permission-${permission.name}`}

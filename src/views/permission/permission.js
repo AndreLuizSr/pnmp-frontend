@@ -73,7 +73,9 @@ const Permission = () => {
                   <tr>
                     <th>#</th>
                     <th>Name</th>
+                    {canEdit && canDelete && (
                     <th>Actions</th>
+                  )}
                   </tr>
                 </thead>
                 <tbody>

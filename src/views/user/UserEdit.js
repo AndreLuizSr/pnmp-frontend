@@ -12,6 +12,7 @@ import {
     FormGroup,
     Label,
     Input,
+    FormFeedback
 } from 'reactstrap';
 
 const UserEdit = () => {
@@ -54,7 +55,7 @@ const UserEdit = () => {
 
         axiosInstance.get(`http://localhost:3000/permission`)
             .then(response => {
-                setPermissionOptions(response.data.map(permit => permit.name));
+                setPermissionOptions(response.data.permissions);
             })
             .catch(error => {
                 console.error('Erro ao buscar opções de permissão:', error);
@@ -84,6 +85,9 @@ const UserEdit = () => {
         }
         if (!email || email.trim() === '' || emailVerify(existingEmails, email, originalEmail)) {
             newErrors.email = 'E-mail é obrigatório ou já existe';
+        }
+        if (!selectedPermissions) {
+            newErrors.permission = 'Permission is required';
         }
 
         if (Object.keys(newErrors).length === 0) {
@@ -186,19 +190,21 @@ const UserEdit = () => {
                             </FormGroup>
                             <FormGroup>
                                 <Label for="Permission">Permission*</Label>
-                                {permissionOptions.map((permit, index) => (
-                                    <FormGroup check key={index}>
+                                {Array.isArray(permissionOptions) && permissionOptions.map((permission) => (
+                                    <FormGroup check key={permission._id}>
                                         <Input
                                             type="checkbox"
-                                            id={`permit-${permit}`}
-                                            checked={selectedPermissions.includes(permit)}
-                                            onChange={() => handlePermissionChange(permit)}
+                                            id={`permit-${permission.name}`}
+                                            checked={selectedPermissions.includes(permission.name)}
+                                            onChange={() => handlePermissionChange(permission.name)}
+                                            invalid={!!errors.permission}
                                         />
-                                        <Label check className="form-check-label" htmlFor={`permit-${permit}`}>
-                                            {permit}
+                                        <Label check className="form-check-label" htmlFor={`permission-${permission.name}`}>
+                                            {permission.name}
                                         </Label>
                                     </FormGroup>
                                 ))}
+                                {errors.permission && <FormFeedback>{errors.permission}</FormFeedback>}
                             </FormGroup>
                             <Button type="submit">Update</Button>
                         </Form>
