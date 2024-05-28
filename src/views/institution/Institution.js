@@ -11,17 +11,28 @@ const Institutions = () => {
   const [canAdd, setCanAdd] = useState(false);
   const [canEdit, setCanEdit] = useState(false);
   const [canDelete, setCanDelete] = useState(false);
+  const [userInstitution, setUserInstitution] = useState(null);
+  const [userHasViewOneRole, setUserHasViewOneRole] = useState(false);
 
   useEffect(() => {
     fetchPermissions();
-    fetchInstitutions();
     fetchUnits();
   }, []);
+
+  useEffect(() => {
+    if (canView || userHasViewOneRole) {
+      fetchInstitutions();
+    }
+  }, [canView, userHasViewOneRole]);
 
   const fetchInstitutions = () => {
     axiosInstance.get("http://localhost:3000/institutions")
       .then(response => {
-        setInstitutions(response.data);
+        let institutionsData = response.data;
+        if (userHasViewOneRole && userInstitution) {
+          institutionsData = institutionsData.filter(institution => institution.name === userInstitution);
+        }
+        setInstitutions(institutionsData);
       })
       .catch(error => {
         console.error('Erro ao buscar os dados:', error);
@@ -33,9 +44,10 @@ const Institutions = () => {
       .then(response => {
         const { user } = response.data;
         if (user && user.roles) {
+          setUserInstitution(user.institution);
           checkPermissions(user.roles);
         } else {
-          console.error('User roles are not defined');
+          console.error('Roles do usuário não estão definidas');
         }
       })
       .catch(error => {
@@ -59,11 +71,13 @@ const Institutions = () => {
 
   const checkPermissions = (roles) => {
     const hasCanView = roles.includes('R100012');
+    const hasCanViewOne = roles.includes('R100013');
     const hasCanAdd = roles.includes('R100014');
     const hasCanEdit = roles.includes('R100015');
     const hasCanDelete = roles.includes('R100016');
 
     setCanView(hasCanView);
+    setUserHasViewOneRole(hasCanViewOne);
     setCanAdd(hasCanAdd);
     setCanEdit(hasCanEdit);
     setCanDelete(hasCanDelete);
@@ -85,60 +99,60 @@ const Institutions = () => {
       <Col lg="12">
         <Card>
           <CardTitle tag="h4" className="border-bottom p-3 mb-0">
-            Table Institutions
+            Tabela de Instituições
           </CardTitle>
           <CardBody className="">
-          {canAdd && (
-            <NavLink to="/institution/create" className="btn btn-success btn-sm ml-3 mb-3">
-              Adicionar
-            </NavLink>
-             )}
-             {canView ? (
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Code</th>
-                  <th>Name</th>
-                  <th>Phone</th>
-                  <th>Address - 1</th>
-                  <th>Address - 2</th>
-                  <th>Postal Code</th>
-                  <th>City</th>
-                  <th>type</th>
-                  {canEdit && canDelete && (
-                    <th>Actions</th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {institutions.map((institution, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{institution.code}</td>
-                    <td>{institution.name}</td>
-                    <td>{institution.phone}</td>
-                    <td>{institution.address.address_line_1}</td>
-                    <td>{institution.address.address_line_2}</td>
-                    <td>{institution.address.postal_code}</td>
-                    <td>{units[institution.unit]}</td>
-                    <td>{institution.type.join(' ')}</td>
-                    <td>
-                    {canEdit && (
-                      <NavLink to={`/institution/edit/${institution._id}`} className="btn btn-primary btn-sm mr-2">
-                        <Icon.Edit />
-                      </NavLink>
-                      )}
-                      {canDelete && (
-                      <Button color="danger" size="sm" onClick={() => handleDeletePermission(institution._id)}>
-                        <Icon.Trash />
-                      </Button>
-                      )}
-                    </td>
+            {canAdd && (
+              <NavLink to="/institution/create" className="btn btn-success btn-sm ml-3 mb-3">
+                Adicionar
+              </NavLink>
+            )}
+            {(canView || userHasViewOneRole) ? (
+              <Table responsive>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Endereço - 1</th>
+                    <th>Endereço - 2</th>
+                    <th>CEP</th>
+                    <th>Cidade</th>
+                    <th>Tipo</th>
+                    {(canEdit || canDelete) && <th>Ações</th>}
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {institutions.map((institution, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{institution.code}</td>
+                      <td>{institution.name}</td>
+                      <td>{institution.phone}</td>
+                      <td>{institution.address.address_line_1}</td>
+                      <td>{institution.address.address_line_2}</td>
+                      <td>{institution.address.postal_code}</td>
+                      <td>{units[institution.unit]}</td>
+                      <td>{institution.type.join(' ')}</td>
+                      {(canEdit || canDelete) && (
+                        <td>
+                          {canEdit && (
+                            <NavLink to={`/institution/edit/${institution._id}`} className="btn btn-primary btn-sm mr-2">
+                              <Icon.Edit />
+                            </NavLink>
+                          )}
+                          {canDelete && (
+                            <Button color="danger" size="sm" onClick={() => handleDeletePermission(institution._id)}>
+                              <Icon.Trash />
+                            </Button>
+                          )}
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             ) : (
               <p>Você não tem permissão para visualizar esta tabela.</p>
             )}
