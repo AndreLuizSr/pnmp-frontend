@@ -56,6 +56,17 @@ const UserCreate = () => {
     });
   };
 
+  const validateInstitution = async (institutionName) => {
+    try {
+      const response = await axiosInstance.get('http://localhost:3000/institutions');
+      const institutions = response.data.map(institution => institution.name);
+      return institutions.includes(institutionName);
+    } catch (error) {
+      console.error('Erro ao buscar as instituições:', error);
+      return false;
+    }
+  };
+
   const emailVerify = (existingEmails, currentEmail) => {
     return existingEmails.includes(currentEmail);
   };
@@ -65,22 +76,23 @@ const UserCreate = () => {
 
     const newErrors = {};
     if (!name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = 'Name invalid';
     }
     if (!password.trim()) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'Password invalid';
     }
     if (!phone.trim()) {
-      newErrors.phone = 'Phone is required';
-    }
-    if (!institution.trim()) {
-      newErrors.institution = 'Institution is required';
+      newErrors.phone = 'Phone invalid';
     }
     if (!email || email.trim() === '' || emailVerify(existingEmails, email)) {
-      newErrors.email = 'E-mail é obrigatório ou já existe';
+      newErrors.email = 'E-mail invalid';
     }
     if (!selectedPermission) {
-      newErrors.permission = 'Permission is required';
+      newErrors.permission = 'Permission invalid';
+    }
+    const institutionExists = await validateInstitution(institution);
+    if (!institution.trim() || !institutionExists) {
+      newErrors.institution = 'Institution invalid';
     }
 
     if (Object.keys(newErrors).length === 0) {

@@ -24,6 +24,7 @@ const UserEdit = () => {
     const [originalEmail, setOriginalEmail] = useState('');
     const [existingEmails, setExistingEmails] = useState([]);
     const [institution, setInstitution] = useState('');
+    const [originalInstitution, setOriginalInstitution] = useState('');
     const [permissionOptions, setPermissionOptions] = useState([]);
     const [selectedPermissions, setSelectedPermissions] = useState([]);
     const [errors, setErrors] = useState({});
@@ -47,6 +48,7 @@ const UserEdit = () => {
                 setEmail(email);
                 setOriginalEmail(email);
                 setInstitution(institution);
+                setOriginalInstitution(institution);
                 setSelectedPermissions(permission);
             })
             .catch(error => {
@@ -66,28 +68,40 @@ const UserEdit = () => {
         return existingEmails.includes(currentEmail) && currentEmail !== originalEmail;
     };
 
+    const validateInstitution = async (institutionName) => {
+        try {
+            const response = await axiosInstance.get('http://localhost:3000/institutions');
+            const institutions = response.data.map(institution => institution.name);
+            return institutions.includes(institutionName);
+        } catch (error) {
+            console.error('Erro ao buscar as instituições:', error);
+            return false;
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         const newErrors = {};
 
         if (!name.trim()) {
-            newErrors.name = 'Name is required';
+            newErrors.name = 'Name invalid';
         }
         if (!password.trim()) {
-            newErrors.password = 'Password is required';
+            newErrors.password = 'Password invalid';
         }
         if (!phone.trim()) {
-            newErrors.phone = 'Phone is required';
-        }
-        if (!institution.trim()) {
-            newErrors.institution = 'Institution is required';
+            newErrors.phone = 'Phone invalid';
         }
         if (!email || email.trim() === '' || emailVerify(existingEmails, email, originalEmail)) {
-            newErrors.email = 'E-mail é obrigatório ou já existe';
+            newErrors.email = 'E-mail invalid';
         }
         if (!selectedPermissions) {
-            newErrors.permission = 'Permission is required';
+            newErrors.permission = 'Permission invalid';
+        }
+        const institutionExists = await validateInstitution(institution);
+        if (!institution.trim() || (!institutionExists && institution !== originalInstitution)) {
+            newErrors.institution = 'Institution invalid';
         }
 
         if (Object.keys(newErrors).length === 0) {
