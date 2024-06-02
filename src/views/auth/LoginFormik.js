@@ -45,9 +45,7 @@ const LoginFormik = () => {
             <Card>
               <CardBody className="p-4 m-1">
                 <h4 className="mb-0 fw-bold">Login</h4>
-                <small className="pb-4 d-block">
-                  Do not have an account? <Link to="/auth/registerformik">Sign Up</Link>
-                </small>
+                <small className="pb-4 d-block"></small>
                 <Formik
                   initialValues={initialValues}
                   validationSchema={validationSchema}
@@ -79,15 +77,6 @@ const LoginFormik = () => {
                           component="div"
                           className="invalid-feedback"
                         />
-                      </FormGroup>
-                      <FormGroup className="form-check d-flex" inline>
-                        <Label check>
-                          <Input type="checkbox" />
-                          Remember me
-                        </Label>
-                        <Link className="ms-auto text-decoration-none" to="/auth/forgotPwd">
-                          <small>Forgot Pwd?</small>
-                        </Link>
                       </FormGroup>
                       <FormGroup>
                         <Button type="submit" color="primary" className="me-2">

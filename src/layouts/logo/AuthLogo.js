@@ -1,27 +1,10 @@
 
-import { useSelector } from 'react-redux';
-
-import { ReactComponent as LogoDarkIcon } from '../../assets/images/logos/dark-logo-icon.svg';
-import { ReactComponent as LogoDarkText } from '../../assets/images/logos/dark-logo-text.svg';
-import { ReactComponent as LogoWhiteIcon } from '../../assets/images/logos/white-logo-icon.svg';
-import { ReactComponent as LogoWhiteText } from '../../assets/images/logos/white-logo-text.svg';
+import LogoImage from '../../assets/images/logos/logo.png';
 
 const AuthLogo = () => {
-  const isDarkMode = useSelector((state) => state.customizer.isDark);
-
   return (
     <div className="p-4 d-flex justify-content-center align-items-center gap-2">
-      {isDarkMode !== false ? (
-        <>
-          <LogoWhiteIcon />
-          <LogoWhiteText />
-        </>
-      ) : (
-        <>
-          <LogoDarkIcon />
-          <LogoDarkText />
-        </>
-      )}
+      <img src={LogoImage} alt="Logo" />
     </div>
   );
 };
