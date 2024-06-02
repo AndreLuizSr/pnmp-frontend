@@ -130,9 +130,9 @@ const Institutions = () => {
                       <td>{institution.code}</td>
                       <td>{institution.name}</td>
                       <td>{institution.phone}</td>
-                      <td>{institution.address.address_line_1}</td>
-                      <td>{institution.address.address_line_2}</td>
-                      <td>{institution.address.postal_code}</td>
+                      <td>{institution.address && institution.address.address_line_1}</td>
+                      <td>{institution.address && institution.address.address_line_2}</td>
+                      <td>{institution.address && institution.address.postal_code}</td>
                       <td>{units[institution.unit]}</td>
                       <td>{institution.type.join(' ')}</td>
                       {(canEdit || canDelete) && (
