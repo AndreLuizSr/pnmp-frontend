@@ -1,7 +1,7 @@
 import * as Icon from "react-feather";
 
 const SidebarData = [
-  { caption: "Home" },
+  { caption: "Home", requiredRoles: [] },
   {
     title: "Dashboard",
     href: "/dashboard",
@@ -11,13 +11,14 @@ const SidebarData = [
     suffixColor: "bg-success",
     collapisble: false,
   },
-  { caption: "Administration" },
+  { caption: "Administration", requiredRoles: [] },
   {
     title: "User",
     href: "/user",
     icon: <Icon.User />,
     id: 2,
     collapisble: false,
+    requiredRoles: ["R100000"],
   },
   {
     title: "Permission",
@@ -25,6 +26,7 @@ const SidebarData = [
     icon: <Icon.CheckSquare />,
     id: 3,
     collapisble: false,
+    requiredRoles: ["R100004"]
   },
   {
     title: "Units",
@@ -32,6 +34,7 @@ const SidebarData = [
     icon: <Icon.Globe />,
     id: 4,
     collapisble: false,
+    requiredRoles: ["R100008"]
   },
   {
     title: "Institutions",
@@ -39,6 +42,7 @@ const SidebarData = [
     icon: <Icon.Grid />,
     id: 5,
     collapisble: false,
+    requiredRoles: ["R100012", "R100013"]
   },
   {
     title: "Events",

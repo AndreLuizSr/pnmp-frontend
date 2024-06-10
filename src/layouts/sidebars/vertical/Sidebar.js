@@ -9,15 +9,14 @@ import { ToggleMobileSidebar } from '../../../store/customizer/CustomizerSlice';
 import NavItemContainer from './NavItemContainer';
 import NavSubMenu from './NavSubMenu';
 
-const Sidebar = () => {
+const hasPermission = (userRoles, requiredRoles) => {
+  if (!requiredRoles) return true;
+  return requiredRoles.some(role => userRoles.includes(role));
+};
+
+const Sidebar = ({ userRoles }) => {
   const location = useLocation();
   const currentURL = location.pathname.split('/').slice(0, -1).join('/');
-
-  //const [collapsed, setCollapsed] = useState(null);
-  // const toggle = (index) => {
-  //   setCollapsed(collapsed === index ? null : index);
-  // };
-
   const activeBg = useSelector((state) => state.customizer.sidebarBg);
   const isFixed = useSelector((state) => state.customizer.isSidebarFixed);
   const dispatch = useDispatch();
@@ -40,7 +39,7 @@ const Sidebar = () => {
         {/********Sidebar Content*******/}
         <div className="p-3 pt-1 mt-2">
           <Nav vertical className={activeBg === 'white' ? '' : 'lightText'}>
-            {SidebarData.map((navi) => {
+            {SidebarData.filter(item => hasPermission(userRoles, item.requiredRoles)).map((navi) => {
               if (navi.caption) {
                 return (
                   <div className="navCaption fw-bold mt-4" key={navi.caption}>
@@ -57,8 +56,6 @@ const Sidebar = () => {
                     items={navi.children}
                     suffix={navi.suffix}
                     suffixColor={navi.suffixColor}
-                    // toggle={() => toggle(navi.id)}
-                    // collapsed={collapsed === navi.id}
                     isUrl={currentURL === navi.href}
                   />
                 );
@@ -66,7 +63,6 @@ const Sidebar = () => {
               return (
                 <NavItemContainer
                   key={navi.id}
-                  //toggle={() => toggle(navi.id)}
                   className={location.pathname === navi.href ? 'activeLink' : ''}
                   to={navi.href}
                   title={navi.title}
