@@ -1,6 +1,8 @@
-import { lazy } from "react";
-import { Navigate } from "react-router-dom";
-import Loadable from "../layouts/loader/Loadable";
+import { lazy } from 'react';
+import { Navigate } from 'react-router-dom';
+import Loadable from '../layouts/loader/Loadable';
+import ProtectedRoute from '../views/auth/ProtectedRoute';
+
 /****Layouts*****/
 const FullLayout = Loadable(lazy(() => import("../layouts/FullLayout")));
 const BlankLayout = Loadable(lazy(() => import("../layouts/BlankLayout")));
@@ -41,35 +43,38 @@ const LoginFormik = Loadable(lazy(() => import('../views/auth/LoginFormik')));
 const ThemeRoutes = [
   {
     path: "/",
+    element: <Navigate to="/auth/login" />,
+  },
+  {
+    path: "/",
     element: <FullLayout />,
     children: [
-      { path: "/", element: <Navigate to="/dashboard" /> },
-      { path: "/dashboard", exact: true, element: <Dashboard /> },
+      { path: "/dashboard", exact: true, element: <ProtectedRoute element={<Dashboard />} /> },
 
       /***** User Pages ****/
-      { path: "/user", exact: true, element: <User /> },
-      { path: "/user/create", exact: true, element: <UserCreate /> },
-      { path: "/user/edit/:_id", exact: true, element: <UserEdit /> },
+      { path: "/user", exact: true, element: <ProtectedRoute element={<User />} /> },
+      { path: "/user/create", exact: true, element: <ProtectedRoute element={<UserCreate />} /> },
+      { path: "/user/edit/:_id", exact: true, element: <ProtectedRoute element={<UserEdit />} /> },
 
       /***** Permission Pages ****/
-      { path: "/permission", exact: true, element: <Permission /> },
-      { path: "/permission/create", exact: true, element: <PermissionCreate /> },
-      { path: "/permission/edit/:_id", exact: true, element: <PermissionEdit /> },
+      { path: "/permission", exact: true, element: <ProtectedRoute element={<Permission />} /> },
+      { path: "/permission/create", exact: true, element: <ProtectedRoute element={<PermissionCreate />} /> },
+      { path: "/permission/edit/:_id", exact: true, element: <ProtectedRoute element={<PermissionEdit />} /> },
 
       /***** Units Pages ****/
-      { path: "/units", exact: true, element: <Units /> },
-      { path: "/unitsStates", exact: true, element: <UnitsStates /> },
-      { path: "/unitsCity", exact: true, element: <UnitsCity /> },
-      { path: "/units/create", exact: true, element: <UnitsCreate /> },
-      { path: "/units/edit/:_id", exact: true, element: <UnitsEdit /> },
+      { path: "/units", exact: true, element: <ProtectedRoute element={<Units />} /> },
+      { path: "/unitsStates", exact: true, element: <ProtectedRoute element={<UnitsStates />} /> },
+      { path: "/unitsCity", exact: true, element: <ProtectedRoute element={<UnitsCity />} /> },
+      { path: "/units/create", exact: true, element: <ProtectedRoute element={<UnitsCreate />} /> },
+      { path: "/units/edit/:_id", exact: true, element: <ProtectedRoute element={<UnitsEdit />} /> },
 
       /***** Institutions Pages ****/
-      { path: "/institution", exact: true, element: <Institution /> },
-      { path: "/institution/create", exact: true, element: <InstitutionCreate /> },
-      { path: "/institution/edit/:_id", exact: true, element: <InstitutionEdit /> },
+      { path: "/institution", exact: true, element: <ProtectedRoute element={<Institution />} /> },
+      { path: "/institution/create", exact: true, element: <ProtectedRoute element={<InstitutionCreate />} /> },
+      { path: "/institution/edit/:_id", exact: true, element: <ProtectedRoute element={<InstitutionEdit />} /> },
 
       /***** Events Pages ****/
-      { path: "/events", exact: true, element: <Events /> },
+      { path: "/events", exact: true, element: <ProtectedRoute element={<Events />} /> },
 
       { path: "*", element: <Navigate to="/auth/404" /> },
     ],
@@ -80,7 +85,7 @@ const ThemeRoutes = [
     children: [
       { path: "404", element: <Error /> },
       { path: "*", element: <Navigate to="/auth/404" /> },
-      { path: 'login', element: <LoginFormik /> },
+      { path: "login", element: <LoginFormik /> },
     ],
   },
 ];

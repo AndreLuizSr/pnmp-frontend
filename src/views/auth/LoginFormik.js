@@ -27,8 +27,8 @@ const LoginFormik = () => {
   const handleSubmit = async (values) => {
     try {
       const response = await axios.post('http://localhost:3000/api/auth/login', values);
-      localStorage.setItem('token', response.data.token);
-      navigate('/');
+      localStorage.setItem('authToken', response.data.token);
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response.data.message);
     }

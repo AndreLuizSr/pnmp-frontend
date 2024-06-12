@@ -50,6 +50,7 @@ const SidebarData = [
     icon: <Icon.Clipboard />,
     id: 6,
     collapisble: false,
+    requiredRoles:["R100000","R100004","R100008","R100012", "R100013"]
   }
 ];
 
