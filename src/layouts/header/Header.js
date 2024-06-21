@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   Navbar,
   Nav,
@@ -21,6 +22,12 @@ const Header = () => {
   const isDarkMode = useSelector((state) => state.customizer.isDark);
   const topbarColor = useSelector((state) => state.customizer.topbarBg);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    localStorage.removeItem('authToken'); // Remover o token JWT do local storage
+    navigate('/auth/login'); // Redirecionar para a página de login
+  };
 
   return (
     <Navbar
@@ -71,7 +78,7 @@ const Header = () => {
           <DropdownMenu className="ddWidth profile-dd">
             <ProfileDD />
             <div className="p-2 px-3">
-              <Button color="danger" size="sm">
+              <Button color="danger" size="sm" onClick={handleLogout}>
                 Logout
               </Button>
             </div>

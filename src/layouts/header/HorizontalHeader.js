@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Navbar,
   Nav,
@@ -27,6 +28,12 @@ const HorizontalHeader = () => {
   const topbarColor = useSelector((state) => state.customizer.topbarBg);
   const isMobileSidebar = useSelector((state) => state.customizer.isMobileSidebar);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    localStorage.removeItem('authToken'); // Remover o token JWT do local storage
+    navigate('/auth/login'); // Redirecionar para a página de login
+  };
 
   return (
     <Navbar
@@ -68,7 +75,7 @@ const HorizontalHeader = () => {
               <ProfileDD />
 
               <div className="p-2 px-3">
-                <Button color="danger" size="sm">
+                <Button color="danger" size="sm" onClick={handleLogout}>
                   Logout
                 </Button>
               </div>
