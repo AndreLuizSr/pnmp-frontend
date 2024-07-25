@@ -77,7 +77,7 @@ const ThemeRoutes = [
       { path: "/institution/edit/:_id", exact: true, element: <ProtectedRoute element={<InstitutionEdit />} /> },
 
       /***** Forms Steps ****/
-      { path: "/casos", exact: true, element: <ProtectedRoute element={<Steps />} /> },
+      { path: "/cases", exact: true, element: <ProtectedRoute element={<Steps />} /> },
 
       /***** Events Pages ****/
       { path: "/events", exact: true, element: <ProtectedRoute element={<Events />} /> },

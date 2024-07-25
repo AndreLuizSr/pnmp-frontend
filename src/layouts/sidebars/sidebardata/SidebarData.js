@@ -45,10 +45,17 @@ const SidebarData = [
     requiredRoles: ["R100012", "R100013"]
   },
   {
+    title: "Cases",
+    href: "/cases",
+    icon: <Icon.Folder />,
+    id: 6,
+    collapisble: false,
+  },
+  {
     title: "Events",
     href: "/events",
     icon: <Icon.Clipboard />,
-    id: 6,
+    id: 7,
     collapisble: false,
     requiredRoles:["R100000","R100004","R100008","R100012", "R100013"]
   }

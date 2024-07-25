@@ -15,9 +15,10 @@ import {
 
 const Step3 = ({ getStore, updateStore, jumpToStep }) => {
   const initialFormData = getStore();
-  if (!initialFormData.exams) {
+  if (!initialFormData.exams || initialFormData.exams.length === 0) {
     initialFormData.exams = [{ type: '', data: '' }];
   }
+
   const [formData, setFormData] = useState(initialFormData);
   const [exams, setExams] = useState(formData.exams);
   const [errors, setErrors] = useState(exams.map(() => ({})));
