@@ -32,6 +32,9 @@ const Institution = Loadable(lazy(() => import("../views/institution/Institution
 const InstitutionCreate = Loadable(lazy(() => import("../views/institution/InstitutionCreate")));
 const InstitutionEdit = Loadable(lazy(() => import("../views/institution/InstitutionEdit")));
 
+/***** Forms Steps ****/
+const Steps = Loadable(lazy(() => import("../views/patientCase/Steps")))
+
 /***** Events Pages ****/
 const Events = Loadable(lazy(() => import("../views/events/Events")));
 
@@ -72,6 +75,9 @@ const ThemeRoutes = [
       { path: "/institution", exact: true, element: <ProtectedRoute element={<Institution />} /> },
       { path: "/institution/create", exact: true, element: <ProtectedRoute element={<InstitutionCreate />} /> },
       { path: "/institution/edit/:_id", exact: true, element: <ProtectedRoute element={<InstitutionEdit />} /> },
+
+      /***** Forms Steps ****/
+      { path: "/casos", exact: true, element: <ProtectedRoute element={<Steps />} /> },
 
       /***** Events Pages ****/
       { path: "/events", exact: true, element: <ProtectedRoute element={<Events />} /> },
