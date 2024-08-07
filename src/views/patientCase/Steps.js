@@ -188,7 +188,7 @@ class FormSteps extends Component {
               <StepZilla
                 ref={this.stepZillaRef} 
                 steps={steps}
-                stepsNavigation={true}
+                stepsNavigation={false}
                 prevBtnOnLastStep={true}
               />
             </div>

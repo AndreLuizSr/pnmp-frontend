@@ -28,9 +28,6 @@ const Institutions = () => {
             Table Events
           </CardTitle>
           <CardBody className="">
-            <NavLink to="/institution/create" className="btn btn-success btn-sm ml-3 mb-3">
-              Adicionar
-            </NavLink>
             <Table responsive>
               <thead>
                 <tr>
