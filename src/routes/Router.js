@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loadable from '../layouts/loader/Loadable';
 import ProtectedRoute from '../views/auth/ProtectedRoute';
+import { element, exact } from 'prop-types';
 
 /****Layouts*****/
 const FullLayout = Loadable(lazy(() => import("../layouts/FullLayout")));
@@ -31,6 +32,11 @@ const UnitsEdit = Loadable(lazy(() => import("../views/units/UnitsEdit")))
 const Institution = Loadable(lazy(() => import("../views/institution/Institution")));
 const InstitutionCreate = Loadable(lazy(() => import("../views/institution/InstitutionCreate")));
 const InstitutionEdit = Loadable(lazy(() => import("../views/institution/InstitutionEdit")));
+
+/***** Medicines Pages ****/
+const Medicines = Loadable(lazy(() => import("../views/medicines/Medicines")));
+const MedicinesCreate = Loadable(lazy(() => import("../views/medicines/MedicinesCreate")));
+const MedicinesEdit = Loadable(lazy(() => import("../views/medicines/MedicinesEdit")));
 
 /***** Forms Steps ****/
 const Steps = Loadable(lazy(() => import("../views/patientCase/Steps")))
@@ -75,6 +81,11 @@ const ThemeRoutes = [
       { path: "/institution", exact: true, element: <ProtectedRoute element={<Institution />} /> },
       { path: "/institution/create", exact: true, element: <ProtectedRoute element={<InstitutionCreate />} /> },
       { path: "/institution/edit/:_id", exact: true, element: <ProtectedRoute element={<InstitutionEdit />} /> },
+
+      /***** Medicines Pages ****/
+      { path: "/medicines", exact: true, element: <ProtectedRoute element={<Medicines/>}/>},
+      { path: "/medicines/create", exact: true, element: <ProtectedRoute element={<MedicinesCreate/>}/>},
+      { path: "/medicines/edit/:_id", exact: true, element: <ProtectedRoute element={<MedicinesEdit/>}/>},
 
       /***** Forms Steps ****/
       { path: "/cases", exact: true, element: <ProtectedRoute element={<Steps />} /> },

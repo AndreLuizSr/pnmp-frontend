@@ -41,17 +41,25 @@ const SidebarData = [
     collapisble: false,
   },
   {
+    title: "Medicines",
+    href: "/medicines",
+    icon: <Icon.Thermometer />,
+    id: 6,
+    collapisble: false,
+    requiredRoles: ["R100017"]
+  },
+  {
     title: "Cases",
     href: "/cases",
     icon: <Icon.Folder />,
-    id: 6,
+    id: 7,
     collapisble: false,
   },
   {
     title: "Events",
     href: "/events",
     icon: <Icon.Clipboard />,
-    id: 7,
+    id: 8,
     collapisble: false,
   }
 ];
