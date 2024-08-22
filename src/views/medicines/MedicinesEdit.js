@@ -18,8 +18,9 @@ import axiosInstance from '../auth/AxiosConfig';
 const MedicinesEdit = () => {
   const { _id } = useParams();
   const navigate = useNavigate();
-  const [medicine, setMedicine] = useState({});
   const [code, setCode] = useState('');
+  const [originalcode, setOriginalCode] = useState('');
+  const [existingCode, setExistingCode] = useState('');
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [dosage, setDosage] = useState('');
@@ -30,10 +31,19 @@ const MedicinesEdit = () => {
 
   useEffect(() => {
     axiosInstance
-      .get(`http://localhost:3000/medicines/${_id}`)
+      .get(`/medicines`)
+      .then((response) => {
+        setExistingCode(response.data.map((medicine) => medicine.code));
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar medicamento:', error);
+      });
+    axiosInstance
+      .get(`/medicines/${_id}`)
       .then((response) => {
         const data = response.data;
         setCode(data.code);
+        setOriginalCode(data.code);
         setName(data.name);
         setType(data.type);
         setDosage(data.dosage);
@@ -46,36 +56,25 @@ const MedicinesEdit = () => {
       });
   }, [_id]);
 
+  const codeVerify = (existingCode, currentCode, originalcode) => {
+    return existingCode.includes(currentCode) && currentCode !== originalcode;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const newErrors = {};
 
-    if (!code.trim()) {
-      newErrors.code = 'Code is required';
+    if (!code.trim() || codeVerify(existingCode, code, originalcode)) {
+      newErrors.code = 'Code invalid';
     }
     if (!name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-    if (!type.trim()) {
-      newErrors.type = 'Type is required';
-    }
-    if (!dosage.trim()) {
-      newErrors.dosage = 'Dosage is required';
-    }
-    if (!dosageType.trim()) {
-      newErrors.dosageType = 'Dosage Type is required';
-    }
-    if (!presentation.trim()) {
-      newErrors.presentation = 'Presentation is required';
-    }
-    if (!source.trim()) {
-      newErrors.source = 'Source is required';
+      newErrors.name = 'Name invalid';
     }
 
     if (Object.keys(newErrors).length === 0) {
       try {
         axiosInstance
-          .put(`http://localhost:3000/medicines/${_id}`, {
+          .put(`/medicines/${_id}`, {
             code,
             name,
             type,
@@ -110,7 +109,7 @@ const MedicinesEdit = () => {
           <CardBody>
             <Form onSubmit={handleSubmit}>
               <FormGroup>
-                <Label for="Code">Code*</Label>
+                <Label for="Code">Codigo*</Label>
                 <Input
                   id="Code"
                   name="code"
@@ -122,7 +121,7 @@ const MedicinesEdit = () => {
                 {errors.code && <FormFeedback>{errors.code}</FormFeedback>}
               </FormGroup>
               <FormGroup>
-                <Label for="Name">Name*</Label>
+                <Label for="Name">Nome*</Label>
                 <Input
                   id="Name"
                   name="name"
@@ -134,82 +133,72 @@ const MedicinesEdit = () => {
                 {errors.name && <FormFeedback>{errors.name}</FormFeedback>}
               </FormGroup>
               <FormGroup>
-                <Label for="Type">Type*</Label>
+                <Label for="Type">Tipo</Label>
                 <Input
                   id="Type"
                   name="type"
                   type="select"
                   value={type}
                   onChange={(e) => setType(e.target.value)}
-                  invalid={!!errors.type}
                 >
-                  <option value="">Select Type</option>
+                  <option value="">Selecione o Tipo</option>
                   <option value="ORAL">Oral</option>
-                  <option value="INJECTABLE">Injectable</option>
+                  <option value="INJECTABLE">Injetável</option>
                 </Input>
-                {errors.type && <FormFeedback>{errors.type}</FormFeedback>}
               </FormGroup>
               <FormGroup>
-                <Label for="Dosage">Dosage*</Label>
+                <Label for="Dosage">Dosagem</Label>
                 <Input
                   id="Dosage"
                   name="dosage"
                   type="text"
                   value={dosage}
                   onChange={(e) => setDosage(e.target.value)}
-                  invalid={!!errors.dosage}
                 />
-                {errors.dosage && <FormFeedback>{errors.dosage}</FormFeedback>}
               </FormGroup>
               <FormGroup>
-                <Label for="DosageType">Dosage Type*</Label>
+                <Label for="DosageType">Tipo de Dosagem</Label>
                 <Input
                   id="DosageType"
                   name="dosageType"
                   type="select"
                   value={dosageType}
                   onChange={(e) => setDosageType(e.target.value)}
-                  invalid={!!errors.dosageType}
                 >
-                  <option value="">Select Dosage Type</option>
+                  <option value="">Selecione Tipo de Dosagem</option>
                   <option value="MG">MG</option>
                   <option value="ML">ML</option>
                 </Input>
-                {errors.dosageType && <FormFeedback>{errors.dosageType}</FormFeedback>}
               </FormGroup>
               <FormGroup>
-                <Label for="Presentation">Presentation*</Label>
+                <Label for="Presentation">Apresentação</Label>
                 <Input
                   id="Presentation"
                   name="presentation"
                   type="select"
                   value={presentation}
                   onChange={(e) => setPresentation(e.target.value)}
-                  invalid={!!errors.presentation}
                 >
-                  <option value="">Select Presentation</option>
-                  <option value="BOTTLE">Bottle</option>
-                  <option value="TABLET">Tablet</option>
-                  <option value="AMPOULE">Ampoule</option>
-                  <option value="CAPSULE">Capsule</option>
+                  <option value="">Selecione Apresentação</option>
+                  <option value="BOTTLE">Frasco</option>
+                  <option value="TABLET">Comprimido</option>
+                  <option value="AMPOULE">Ampola</option>
+                  <option value="CAPSULE">Cápsula</option>
                 </Input>
-                {errors.presentation && <FormFeedback>{errors.presentation}</FormFeedback>}
               </FormGroup>
               <FormGroup>
-                <Label for="Source">Source*</Label>
+                <Label for="Source">Fonte</Label>
                 <Input
                   id="Source"
                   name="source"
                   type="select"
                   value={source}
                   onChange={(e) => setSource(e.target.value)}
-                  invalid={!!errors.source}
                 >
-                  <option value="">Select Source</option>
-                  <option value="MS">MS (Ministério da Saúde)</option>
+                  <option value="">Selecione Fonte</option>
+                  <option value="MS">Ministério da Saúde</option>
                   <option value="OTR">Other</option>
                 </Input>
-                {errors.source && <FormFeedback>{errors.source}</FormFeedback>}
               </FormGroup>
               <Button type="submit">Submit</Button>
             </Form>

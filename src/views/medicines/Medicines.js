@@ -78,7 +78,7 @@ const Medicines = () => {
           </CardTitle>
           <CardBody className="">
             {canAdd && (
-              <NavLink to="/medicine/create" className="btn btn-success btn-sm ml-3 mb-3">
+              <NavLink to="/medicines/create" className="btn btn-success btn-sm ml-3 mb-3">
                 Adicionar
               </NavLink>
             )}
@@ -111,7 +111,7 @@ const Medicines = () => {
                       {(canEdit || canDelete) && (
                         <td>
                           {canEdit && (
-                            <NavLink to={`/medicine/edit/${medicine._id}`} className="btn btn-primary btn-sm mr-2">
+                            <NavLink to={`/medicines/edit/${medicine._id}`} className="btn btn-primary btn-sm mr-2">
                               <Icon.Edit />
                             </NavLink>
                           )}
